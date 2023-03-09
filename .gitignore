@@ -54,3 +54,6 @@ dkms.conf
 
 # Intellisense database
 /.vscode/browsedb/
+
+#build directory
+/build/
