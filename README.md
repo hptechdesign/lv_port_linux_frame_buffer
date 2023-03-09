@@ -1,11 +1,8 @@
-# LVGL for frame buffer device
+# ECU Display running on RPi
 
 LVGL configured to work with /dev/fb0 on Linux.
 
 When cloning this repository, also make sure to download submodules (`git submodule update --init --recursive`) otherwise you will be missing key components.
-
-Derived from the LVGL Framebuffer Demo project and its related sub modules [https://github.com/lvgl/lv_port_linux_frame_buffer.git].
-See this blog post for a step by step tutorial for deriving from scratch [https://blog.lvgl.io/2018-01-03/linux_fb]
 
 ## Clone the project
 ```
@@ -26,3 +23,8 @@ sudo make install
 ```
 demo
 ```
+
+Derived from the LVGL Framebuffer Demo project and its related sub modules:
+[https://github.com/lvgl/lv_port_linux_frame_buffer.git].
+See this blog post for a step by step tutorial for deriving from scratch:
+[https://blog.lvgl.io/2018-01-03/linux_fb]
