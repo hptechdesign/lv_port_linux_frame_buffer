@@ -8,7 +8,7 @@
             "type": "gdb",
             "request": "attach",
             "name": "Attach to gdbserver",
-            "executable": "./build/Hello_world_c",
+            "executable": "./build/lvgl_fb",
             "target": "192.168.0.115:9999",
             "remote": true,
             "cwd": "${workspaceRoot}", 
