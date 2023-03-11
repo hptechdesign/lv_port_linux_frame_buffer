@@ -11,18 +11,11 @@ cd rpi_ecu_display/
 git submodule update --init --recursive
 ```
 
-## Build the project
+Download the pre-built windows toolchain for raspberry pi from here (select compatible version, e.g. Bullseye):
+https://gnutoolchains.com/raspberry/
 
-```
-make
-sudo make install
-```
-
-## Run the demo application
-
-```
-demo
-```
+Set up environment variable RPIDEV_LOC, and set up the ssh configurations as described here:
+https://www.codeproject.com/Articles/1279667/Toolset-to-Cross-Compile-Remote-Debug-Raspberry-fr
 
 Derived from the LVGL Framebuffer Demo project and its related sub modules:
 [https://github.com/lvgl/lv_port_linux_frame_buffer.git].
