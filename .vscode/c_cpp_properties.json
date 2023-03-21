@@ -4,9 +4,10 @@
             "name": "RPI-Win",
             "includePath": [
                 "${workspaceRoot}/**",
-                "${workspaceRoot}/src/**",
-                "${workspaceRoot}/inc/**",
-                "${RPIDEV_LOC}/**"
+                "${workspaceRoot}/lvgl/**",
+                "${workspaceRoot}/lv_drivers/**",
+                "${RPIDEV_LOC}/**",
+                "C:\\SysGCC\\raspberry\\arm-linux-gnueabihf\\sysroot\\usr\\include"
             ],
             "defines": [
                 "_DEBUG",

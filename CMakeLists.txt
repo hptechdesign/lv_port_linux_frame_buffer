@@ -21,9 +21,8 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 project(lvgl_fb)
 
-include_directories(.)
-add_subdirectory(lvgl)
-add_subdirectory(lv_drivers)
+include_directories(inc)
+add_subdirectory(inc/lvgl)
+add_subdirectory(inc/lv_drivers)
+add_subdirectory(src)
 
-add_executable(${PROJECT_NAME} main.c mouse_cursor_icon.c)
-target_link_libraries(${PROJECT_NAME} PRIVATE lvgl lvgl::examples lvgl::demos lvgl::drivers)

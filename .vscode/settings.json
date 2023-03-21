@@ -2,6 +2,7 @@
 "files.associations": {
     "main.h": "c",
     "cg_debug.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "lv_log.h": "c"
 }
 }

@@ -1,5 +1,6 @@
 #include "lvgl/lvgl.h"
-#include "lvgl/demos/lv_demos.h"
+//#include "lvgl/demos/lv_demos.h"
+#include "lvgl/examples/lv_examples.h"
 #include "lv_drivers/display/fbdev.h"
 #include "lv_drivers/indev/evdev.h"
 #include <unistd.h>
@@ -51,7 +52,8 @@ int main(void)
 
 
     /*Create a Demo*/
-    lv_demo_widgets();
+    //lv_demo_widgets();
+    lv_example_meter_1();
 
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
