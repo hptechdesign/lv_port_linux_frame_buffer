@@ -8,7 +8,7 @@
             "type": "gdb",
             "request": "attach",
             "name": "Attach to gdbserver",
-            "executable": "./build/lvgl_fb",
+            "executable": "./build/src/rpi_ecu_display",
             "target": "192.168.0.115:9999",
             "remote": true,
             "cwd": "${workspaceRoot}", 

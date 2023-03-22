@@ -19,7 +19,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-project(lvgl_fb)
+project(rpi_ecu_display)
 
 include_directories(inc)
 add_subdirectory(inc/lvgl)

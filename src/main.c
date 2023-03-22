@@ -10,6 +10,9 @@
 
 #define DISP_BUF_SIZE (128 * 1024)
 
+
+void meter_rpm(void);
+
 int main(void)
 {
     /*LittlevGL init*/
@@ -53,8 +56,9 @@ int main(void)
 
     /*Create a Demo*/
     //lv_demo_widgets();
-    lv_example_meter_1();
-
+    //lv_example_meter_1();
+    meter_rpm();
+    
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
         lv_timer_handler();
