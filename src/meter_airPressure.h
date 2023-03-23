@@ -1,6 +1,8 @@
-#define METER_AIRP_XPOS (520 - 200)
+#include "ecu_configs.h"
+
+#define METER_AIRP_XPOS 300
 #define METER_AIRP_YPOS 10
-#define METER_AIRP_SIZE 200
+#define METER_AIRP_SIZE SMALL_METER_SIZE
 
 #define METER_AIRP_LABEL_YOFFSET 50
 

@@ -1,3 +1,5 @@
+#include "ecu_configs.h"
+
 #define BAR_WATERTEMP1_XPOS 30
 #define BAR_WATERTEMP1_YPOS 340
 

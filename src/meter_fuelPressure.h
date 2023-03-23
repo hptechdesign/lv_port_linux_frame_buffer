@@ -1,6 +1,8 @@
-#define METER_FUELP_XPOS (520+25)
+#include "ecu_configs.h"
+
+#define METER_FUELP_XPOS 550
 #define METER_FUELP_YPOS 10
-#define METER_FUELP_SIZE 200
+#define METER_FUELP_SIZE SMALL_METER_SIZE
 
 #define METER_FUELP_LABEL_YOFFSET 50
 

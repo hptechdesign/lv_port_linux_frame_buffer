@@ -61,6 +61,7 @@ int main(void)
     /*Draw Widgets*/
     bar_waterTemp1();
     bar_waterTemp2();
+    meter_oilPressure();
     meter_airPressure();
     meter_fuelPressure();
     meter_rpm();
