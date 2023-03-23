@@ -55,13 +55,10 @@ int main(void)
     lv_indev_set_cursor(mouse_indev, cursor_obj);             /*Connect the image  object to the driver*/
 
 
-    /*Create a Demo*/
-    //lv_demo_widgets();
-    //lv_example_meter_1();
+    /*Draw Widgets*/
     meter_rpm();
-    bar_temperature1();
-    bar_temperature2();
     bar_waterTemp1();
+    bar_waterTemp2();
     
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
