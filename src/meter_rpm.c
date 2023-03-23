@@ -1,4 +1,5 @@
 #include "lvgl/lvgl.h"
+#include "meter_rpm.h"
 
 static lv_obj_t * meter;
 
@@ -13,14 +14,14 @@ static void set_value(void * indic, int32_t v)
 void meter_rpm(void)
 {
     meter = lv_meter_create(lv_scr_act());
-    lv_obj_center(meter);
-    lv_obj_set_size(meter, 400, 400);
+    lv_obj_set_pos(meter, METER_RPM_XPOS, METER_RPM_YPOS);
+    lv_obj_set_size(meter, METER_RPM_SIZE, METER_RPM_SIZE);
 
     /*Add a scale first*/
     lv_meter_scale_t * scale = lv_meter_add_scale(meter);
     lv_meter_set_scale_range(meter, scale, 0, 3000, 270, 135);
     lv_meter_set_scale_ticks(meter, scale, 41, 2, 10, lv_palette_main(LV_PALETTE_GREY));
-    lv_meter_set_scale_major_ticks(meter, scale, 8, 4, 15, lv_color_black(), 10);
+    lv_meter_set_scale_major_ticks(meter, scale, 8, 4, 15, lv_color_black(), 15);
 
     lv_meter_indicator_t * indic;
 
