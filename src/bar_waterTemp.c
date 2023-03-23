@@ -64,7 +64,7 @@ void bar_waterTemp1(void)
     lv_obj_t * bar = lv_bar_create(lv_scr_act());
     lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
     lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
-    lv_obj_set_size(bar, BAR_WATERTEMP1_SIZEX, BAR_WATERTEMP1_SIZEY);
+    lv_obj_set_size(bar, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
     lv_obj_set_pos(bar,BAR_WATERTEMP1_XPOS,BAR_WATERTEMP1_YPOS);
     lv_bar_set_range(bar, 0, 150);
 
@@ -72,10 +72,10 @@ void bar_waterTemp1(void)
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
     lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff CYL 1 WATER TEMP, C");
-    lv_obj_set_width(label1, BAR_WATERTEMP1_SIZEX);  /*Set smaller width to make the lines wrap*/
+    lv_label_set_text(label1, "#ffffff Cylinder One, °C");
+    lv_obj_set_width(label1, BAR_WATERTEMP_SIZEX);  /*Set smaller width to make the lines wrap*/
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_set_pos(label1, BAR_WATERTEMP1_XPOS, BAR_WATERTEMP1_YPOS+BAR_WATERTEMP1_SIZEY+5);
+    lv_obj_set_pos(label1, BAR_WATERTEMP1_XPOS, BAR_WATERTEMP1_YPOS+BAR_WATERTEMP_SIZEY+5);
 
     // Animate
     lv_anim_t a;
@@ -103,7 +103,7 @@ void bar_waterTemp2(void)
     lv_obj_t * bar = lv_bar_create(lv_scr_act());
     lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
     lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
-    lv_obj_set_size(bar, BAR_WATERTEMP2_SIZEX, BAR_WATERTEMP2_SIZEY);
+    lv_obj_set_size(bar, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
     lv_obj_set_pos(bar,BAR_WATERTEMP2_XPOS,BAR_WATERTEMP2_YPOS);
     lv_bar_set_range(bar, 0, 150);
 
@@ -111,10 +111,10 @@ void bar_waterTemp2(void)
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
     lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff CYL 2 WATER TEMP, C");
-    lv_obj_set_width(label1, BAR_WATERTEMP2_SIZEX);  /*Set smaller width to make the lines wrap*/
+    lv_label_set_text(label1, "#ffffff Cylinder Two, °C");
+    lv_obj_set_width(label1, BAR_WATERTEMP_SIZEX);  /*Set smaller width to make the lines wrap*/
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_set_pos(label1, BAR_WATERTEMP2_XPOS, BAR_WATERTEMP2_YPOS+BAR_WATERTEMP2_SIZEY+5);
+    lv_obj_set_pos(label1, BAR_WATERTEMP2_XPOS, BAR_WATERTEMP2_YPOS+BAR_WATERTEMP_SIZEY+5);
 
     // Animate
     lv_anim_t a;
