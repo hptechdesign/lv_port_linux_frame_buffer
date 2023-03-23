@@ -12,7 +12,9 @@
             "target": "192.168.0.115:9999",
             "remote": true,
             "cwd": "${workspaceRoot}", 
-            "gdbpath": "arm-linux-gnueabihf-gdb.exe"
+            "gdbpath": "arm-linux-gnueabihf-gdb.exe",
+            //"preLaunchTask": "Transfer to RPI and Start GDB server",
+            //"postDebugTask": "Kill GDB server"
         }
     ]
 }
