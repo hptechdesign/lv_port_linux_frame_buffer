@@ -56,11 +56,11 @@ void meter_fuelPressure(void)
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
     lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff Fuel Pressure, Bar");
+    lv_label_set_text(label1, "#ffffff FUEL\nPressure, Bar");
     lv_obj_set_width(label1, METER_FUELP_SIZE);  /*Set smaller width to make the lines wrap*/
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_pos(label1, METER_FUELP_XPOS, METER_FUELP_YPOS+METER_FUELP_SIZE-METER_FUELP_LABEL_YOFFSET);
-    lv_obj_set_style_text_font(label1, METER_FUELP_FONT, LV_PART_MAIN);
+    lv_obj_set_style_text_font(label1, LABEL_FUELP_FONT, LV_PART_MAIN);
 
     /*Create an animation to set the value*/
     lv_anim_t a;

@@ -55,7 +55,7 @@ void meter_rpm(void)
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
     lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff RPM, rev/min");
+    lv_label_set_text(label1, "#ffffff RPM");
     lv_obj_set_width(label1, METER_RPM_SIZE);  /*Set smaller width to make the lines wrap*/
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_pos(label1, METER_RPM_XPOS, METER_RPM_YPOS+METER_RPM_SIZE-45);
