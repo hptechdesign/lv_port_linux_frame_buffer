@@ -1,17 +1,17 @@
 #include "lvgl/lvgl.h"
-//#include "lvgl/demos/lv_demos.h"
-#include "lvgl/examples/lv_examples.h"
 #include "lv_drivers/display/fbdev.h"
 #include "lv_drivers/indev/evdev.h"
 #include <unistd.h>
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
+#include "meter_rpm.h"
+#include "bar_temperature.h"
 
 #define DISP_BUF_SIZE (128 * 1024)
 
 
-void meter_rpm(void);
+
 
 int main(void)
 {
@@ -58,6 +58,8 @@ int main(void)
     //lv_demo_widgets();
     //lv_example_meter_1();
     meter_rpm();
+    bar_temperature1();
+    bar_temperature2();
     
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
