@@ -3,6 +3,8 @@
     "main.h": "c",
     "cg_debug.h": "c",
     "stdio.h": "c",
-    "lv_log.h": "c"
+    "lv_log.h": "c",
+    "meter_rpm.h": "c",
+    "lvgl.h": "c"
 }
 }

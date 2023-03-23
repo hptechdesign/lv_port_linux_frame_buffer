@@ -5,9 +5,12 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
-#include "meter_rpm.h"
-#include "bar_temperature.h"
+
 #include "bar_waterTemp.h"
+#include "meter_airPressure.h"
+#include "meter_fuelPressure.h"
+#include "meter_oilPressure.h"
+#include "meter_rpm.h"
 
 #define DISP_BUF_SIZE (128 * 1024)
 
@@ -56,9 +59,11 @@ int main(void)
 
 
     /*Draw Widgets*/
-    meter_rpm();
     bar_waterTemp1();
     bar_waterTemp2();
+    meter_airPressure();
+    meter_fuelPressure();
+    meter_rpm();
     
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
