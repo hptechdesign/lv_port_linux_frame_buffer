@@ -7,6 +7,7 @@
 #include <sys/time.h>
 #include "meter_rpm.h"
 #include "bar_temperature.h"
+#include "bar_waterTemp.h"
 
 #define DISP_BUF_SIZE (128 * 1024)
 
@@ -60,6 +61,7 @@ int main(void)
     meter_rpm();
     bar_temperature1();
     bar_temperature2();
+    bar_waterTemp1();
     
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
