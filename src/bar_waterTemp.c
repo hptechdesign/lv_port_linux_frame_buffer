@@ -1,5 +1,6 @@
 #include "lvgl.h"
 #include "bar_waterTemp.h"
+#include <stdio.h>
 
 static void set_value(void * bar, int32_t v)
 {
@@ -67,6 +68,16 @@ void bar_waterTemp1(void)
     lv_obj_set_pos(bar,BAR_WATERTEMP1_XPOS,BAR_WATERTEMP1_YPOS);
     lv_bar_set_range(bar, 0, 150);
 
+    // Draw label
+    lv_obj_t * label1 = lv_label_create(lv_scr_act());
+    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
+    lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
+    lv_label_set_text(label1, "#ffffff CYL 1 WATER TEMP, C");
+    lv_obj_set_width(label1, BAR_WATERTEMP1_SIZEX);  /*Set smaller width to make the lines wrap*/
+    lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_set_pos(label1, BAR_WATERTEMP1_XPOS, BAR_WATERTEMP1_YPOS+BAR_WATERTEMP1_SIZEY+5);
+
+    // Animate
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, bar);
@@ -96,6 +107,16 @@ void bar_waterTemp2(void)
     lv_obj_set_pos(bar,BAR_WATERTEMP2_XPOS,BAR_WATERTEMP2_YPOS);
     lv_bar_set_range(bar, 0, 150);
 
+    // Draw label
+    lv_obj_t * label1 = lv_label_create(lv_scr_act());
+    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
+    lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
+    lv_label_set_text(label1, "#ffffff CYL 2 WATER TEMP, C");
+    lv_obj_set_width(label1, BAR_WATERTEMP2_SIZEX);  /*Set smaller width to make the lines wrap*/
+    lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_set_pos(label1, BAR_WATERTEMP2_XPOS, BAR_WATERTEMP2_YPOS+BAR_WATERTEMP2_SIZEY+5);
+
+    // Animate
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, bar);
