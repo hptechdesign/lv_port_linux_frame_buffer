@@ -4,8 +4,8 @@
             "name": "RPI-Win",
             "includePath": [
                 "${workspaceRoot}/**",
-                "${workspaceRoot}/lvgl/**",
-                "${workspaceRoot}/lv_drivers/**",
+                "${workspaceRoot}/inc/lvgl/**",
+                "${workspaceRoot}/inc/lv_drivers/**",
                 "${RPIDEV_LOC}/**",
                 "C:\\SysGCC\\raspberry\\arm-linux-gnueabihf\\sysroot\\usr\\include"
             ],
@@ -15,6 +15,7 @@
                 "_UNICODE"
             ],
             "compilerPath": "",
+            "compileCommands": "${workspaceRoot}/build/compile_commands.json",
             "intelliSenseMode": "clang-x64",
             "browse": {
                 "path": [

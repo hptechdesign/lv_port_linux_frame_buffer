@@ -8,11 +8,13 @@
  */
 
 /* clang-format off */
-#if 1 /*Set it to "1" to enable the content*/
+
 
 #ifndef LV_DRV_CONF_H
 #define LV_DRV_CONF_H
+#include "ecu_configs.h"
 
+#ifdef RPI_ECU_DISPLAY
 #include "lv_conf.h"
 
 /*********************
@@ -491,4 +493,4 @@
 
 #endif  /*LV_DRV_CONF_H*/
 
-#endif /*End of "Content enable"*/
+#endif /*RPI_ECU_DISPLAY*/
