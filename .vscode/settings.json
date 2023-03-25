@@ -5,6 +5,7 @@
     "stdio.h": "c",
     "lv_log.h": "c",
     "meter_rpm.h": "c",
-    "lvgl.h": "c"
+    "lvgl.h": "c",
+    "fbdev.h": "c"
 }
 }

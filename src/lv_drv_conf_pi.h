@@ -14,7 +14,7 @@
 #define LV_DRV_CONF_H
 #include "ecu_configs.h"
 
-#ifdef RPI_ECU_DISPLAY
+#if RPI_ECU_DISPLAY
 #include "lv_conf.h"
 
 /*********************
