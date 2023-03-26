@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.12.4)
 
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} 
 				main.c 
@@ -9,4 +11,8 @@ add_executable(${PROJECT_NAME}
 				meter_fuelPressure.c
 				meter_oilPressure.c
 				meter_rpm.c)
-target_link_libraries(${PROJECT_NAME} PRIVATE lvgl lvgl::drivers)
+
+target_link_libraries(${PROJECT_NAME} 
+							PRIVATE 	lvgl 
+										lvgl::drivers
+										${SDL2_LIBRARIES})
