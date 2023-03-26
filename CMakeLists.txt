@@ -20,7 +20,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 
-add_compile_definitions(RPI_ECU_DISPLAY=1)
+#add_compile_definitions(RPI_ECU_DISPLAY=1)
 
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-DLV_CONF_INCLUDE_SIMPLE")
@@ -35,4 +35,4 @@ add_subdirectory(src)
 
 # this next command generates a compile_command.json file for intellisense to recognise
 # the add_compile_definitions used. Note: used by Ninja and Makefile generators, check others
-target_compile_definitions(rpi_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
+#target_compile_definitions(rpi_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)

@@ -1,5 +1,5 @@
 #include "lvgl/lvgl.h"
-
+#include "ecu_configs.h"
 #ifdef RPI_ECU_DISPLAY
 
 #include "init_rpi_env.h"
