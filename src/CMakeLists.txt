@@ -9,4 +9,4 @@ add_executable(${PROJECT_NAME}
 				meter_fuelPressure.c
 				meter_oilPressure.c
 				meter_rpm.c)
-target_link_libraries(${PROJECT_NAME} PRIVATE lvgl lvgl::examples lvgl::demos lvgl::drivers)
+target_link_libraries(${PROJECT_NAME} PRIVATE lvgl lvgl::drivers)
