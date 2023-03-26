@@ -1,11 +1,15 @@
 #include "lvgl/lvgl.h"
 #include "ecu_configs.h"
-#ifdef RPI_ECU_DISPLAY
 
+#if RPI_ECU_DISPLAY
 #include "init_rpi_env.h"
-#else// WIN_ECU_DISPLAY
-#include "init_win_env.h"
 #endif // RPI_ECU_DISPLAY
+
+#if SDL_ECU_DISPLAY
+#include "init_win_env.h"
+#include <stdio.h>
+#endif  //SDL_ECU_DISPLAY
+
 
 /// Common includes
 #include "bar_waterTemp.h"
@@ -23,14 +27,10 @@ int main(void)
 {
     /*LittlevGL init*/
     lv_init();
+    printf("Begin main loop\n");
 
-#if WIN_ECU_DISPLAY
-/// SETUP WINDOWS:
-    if (!single_display_mode_initialization())
-    {
-        return -1;
-}
-#else
+
+#if RPI_ECU_DISPLAY
 //// SETUP PI:
     /*Linux frame buffer device init*/
     fbdev_init();
@@ -68,32 +68,37 @@ int main(void)
     lv_indev_set_cursor(mouse_indev, cursor_obj);             /*Connect the image  object to the driver*/
 #endif // RPI_ECU_DISPLAY
 
-    /*Draw Widgets*/
-    bar_waterTemp1();
-    bar_waterTemp2();
-    meter_oilPressure();
-    meter_airPressure();
-    meter_fuelPressure();
-    meter_rpm();
+    // /*Draw Widgets*/
+    // bar_waterTemp1();
+    // bar_waterTemp2();
+    // meter_oilPressure();
+    // meter_airPressure();
+    // meter_fuelPressure();
+    // meter_rpm();
     
-#if WIN_ECU_DISPLAY
-        while (!lv_win32_quit_signal)
-        {
-            lv_task_handler();
-            Sleep(1);
-        }
-#else
+
+#if RPI_ECU_DISPLAY
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
         lv_timer_handler();
         usleep(5000);
     }
-#endif  /// WIN_ECU_DISPLAY
+#endif  /// RPI_ECU_DISPLAY
+
+#if SDL_ECU_DISPLAY
+    for (;;) {
+        // Run LVGL engine
+        lv_tick_inc(1);
+        lv_timer_handler();
+        usleep(1000);
+    }
+#endif // SDL_ECU_DISPLAY
 
     return 0;
 }
 
 
+#if RPI_ECU_DISPLAY
 /// Used in RPI build, not windows:
 /*Set in lv_conf.h as `LV_TICK_CUSTOM_SYS_TIME_EXPR`*/
 uint32_t custom_tick_get(void)
@@ -113,3 +118,4 @@ uint32_t custom_tick_get(void)
     uint32_t time_ms = now_ms - start_ms;
     return time_ms;
 }
+#endif // RPI_ECU_DISPLAY

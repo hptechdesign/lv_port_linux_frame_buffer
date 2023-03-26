@@ -6,6 +6,7 @@
     "lv_log.h": "c",
     "meter_rpm.h": "c",
     "lvgl.h": "c",
-    "fbdev.h": "c"
+    "fbdev.h": "c",
+    "init_win_env.h": "c"
 }
 }

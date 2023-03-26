@@ -1,5 +1,5 @@
 
-#define RPI_ECU_DISPLAY 1
+#define SDL_ECU_DISPLAY 1
 
 #define SMALL_METER_SIZE  200
 #define LARGE_METER_SIZE  250
