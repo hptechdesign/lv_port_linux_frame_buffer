@@ -4,8 +4,10 @@
             "name": "RPI-Win",
             "includePath": [
                 "${workspaceRoot}/**",
+                "${workspaceRoot}/inc/**",
                 "${workspaceRoot}/inc/lvgl/**",
                 "${workspaceRoot}/inc/lv_drivers/**",
+                "${workspaceRoot}/inc/SPinGW"
 
             ],
             "defines": [
@@ -13,9 +15,9 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "",
+            "compilerPath": "C:\\msys64\\mingw64\\bin\\c++.exe",
             "compileCommands": "${workspaceRoot}/build/compile_commands.json",
-            "intelliSenseMode": "clang-x64",
+            "intelliSenseMode": "${default}",
             "browse": {
                 "path": [
                     "${workspaceRoot}",

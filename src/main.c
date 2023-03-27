@@ -8,6 +8,10 @@
 #if SDL_ECU_DISPLAY
 #include "sdl/sdl.h"
 #include <stdio.h>
+
+#include <stdio.h>
+#include "serialport.h"
+
 #endif  //SDL_ECU_DISPLAY
 
 
@@ -17,6 +21,8 @@
 #include "meter_fuelPressure.h"
 #include "meter_oilPressure.h"
 #include "meter_rpm.h"
+
+
 
 #define DISP_BUF_SIZE (128 * 1024)
 
@@ -29,6 +35,21 @@ int main(int argc, char *argv[])
     lv_init();
     sdl_init();
     printf("Begin main loop\n");
+
+    /// SERIAL PORT TEST
+        HANDLE h = openSerialPort("COM4",B115200,one,off);
+        char sendbuffer[] = "sdl_ecu_display: initialising";
+        char readbuffer[100];
+        //write test
+        int bytesWritten = writeToSerialPort(h,sendbuffer,strlen(sendbuffer));
+        printf("%d Bytes were written\n",bytesWritten);
+        //read something
+        int bytesRead = readFromSerialPort(h,readbuffer,99);
+        readbuffer[bytesRead]=0;
+        printf("%d Bytes were read:%s\n",bytesRead,readbuffer);
+        if(!closeSerialPort(h)){
+            ErrorExit("Closing Port failed: ");
+        }
 
 
 #if SDL_ECU_DISPLAY
