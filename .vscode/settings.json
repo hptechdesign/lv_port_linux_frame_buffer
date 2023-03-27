@@ -7,6 +7,9 @@
     "meter_rpm.h": "c",
     "lvgl.h": "c",
     "fbdev.h": "c",
-    "init_win_env.h": "c"
+    "init_win_env.h": "c",
+    "ecu_configs.h": "c",
+    "init_rpi_env.h": "c",
+    "meter_airpressure.h": "c"
 }
 }

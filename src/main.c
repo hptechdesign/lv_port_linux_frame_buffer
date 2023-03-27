@@ -1,17 +1,23 @@
+
+
+
 #include "lvgl/lvgl.h"
 #include "ecu_configs.h"
+#include <unistd.h>
+
 
 #if RPI_ECU_DISPLAY
 #include "init_rpi_env.h"
 #endif // RPI_ECU_DISPLAY
 
 #if SDL_ECU_DISPLAY
+// include the lvgl header
 #include "sdl/sdl.h"
-#include <stdio.h>
-
+// also include the SDL2 header
+#include "sdl.h"
+//serial port
 #include <stdio.h>
 #include "serialport.h"
-
 #endif  //SDL_ECU_DISPLAY
 
 
@@ -27,7 +33,7 @@
 #define DISP_BUF_SIZE (128 * 1024)
 
 
-
+static HANDLE portHandle = NULL;
 
 int main(int argc, char *argv[])
 {
@@ -36,21 +42,22 @@ int main(int argc, char *argv[])
     sdl_init();
     printf("Begin main loop\n");
 
+#if serial_port
     /// SERIAL PORT TEST
-        HANDLE h = openSerialPort("COM4",B115200,one,off);
+        portHandle = openSerialPort("COM4",B115200,one,off);
         char sendbuffer[] = "sdl_ecu_display: initialising";
         char readbuffer[100];
         //write test
-        int bytesWritten = writeToSerialPort(h,sendbuffer,strlen(sendbuffer));
+        int bytesWritten = writeToSerialPort(portHandle,sendbuffer,strlen(sendbuffer));
         printf("%d Bytes were written\n",bytesWritten);
         //read something
-        int bytesRead = readFromSerialPort(h,readbuffer,99);
+        int bytesRead = readFromSerialPort(portHandle,readbuffer,99);
         readbuffer[bytesRead]=0;
         printf("%d Bytes were read:%s\n",bytesRead,readbuffer);
-        if(!closeSerialPort(h)){
+        if(!closeSerialPort(portHandle)){
             ErrorExit("Closing Port failed: ");
         }
-
+#endif 
 
 #if SDL_ECU_DISPLAY
 #define BUFFER_SIZE (SDL_HOR_RES * SDL_VER_RES)
