@@ -15,4 +15,5 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
 							PRIVATE 	lvgl 
 										lvgl::drivers
-										${SDL2_LIBRARIES})
+										${SDL2_LIBRARIES}
+										SPinGW)

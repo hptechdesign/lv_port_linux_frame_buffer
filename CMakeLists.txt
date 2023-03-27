@@ -28,9 +28,11 @@ SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
 project(sdl_ecu_display)
 
-include_directories(inc src)
+include_directories(inc inc/SPinGW src)
+
 add_subdirectory(inc/lvgl)
 add_subdirectory(inc/lv_drivers)
+add_subdirectory(inc/SPinGW)
 add_subdirectory(src)
 
 # this next command generates a compile_command.json file for intellisense to recognise
