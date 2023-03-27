@@ -6,4 +6,4 @@
 	url = git@github.com:hptechdesign/lvgl.git
 [submodule "inc/SPinGW"]
 	path = inc/SPinGW
-	url = git@github.com:waynix/SPinGW.git
+	url = git@github.com:hptechdesign/SPinGW.git
