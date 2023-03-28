@@ -2,11 +2,8 @@
 // **************  Common includes
 #include "lvgl/lvgl.h"
 #include "ecu_configs.h"
+#include "serial.h"
 
-#include <stdio.h>
-// Serial port
-
-#include "rs232.h"
 
 
 // Widgets
@@ -43,43 +40,9 @@ int main(int argc, char *argv[])
     sdl_init();
     printf("Begin main loop\n");
 
-{
-  int i=0,
-      cport_nr=7,        /* /dev/ttyS0 (COM1 on windows) */
-      bdrate=115200;     /* 115200 baud */
+    serial_init(0);
 
-  char mode[]={'8','N','1',0},
-       str[2][512];
-
-
-  strcpy(str[0], "The quick brown fox jumped over the lazy grey dog.\n");
-
-  strcpy(str[1], "Happy serial programming!\n");
-
-  if(RS232_OpenComport(cport_nr, bdrate, mode, 0))
-  {
-    printf("Can not open comport\n");
-
-    return(0);
-  }
-
-  while(1)
-  {
-    RS232_cputs(cport_nr, str[i]);
-
-    printf("sent: %s\n", str[i]);
-
-#ifdef _WIN32
-    Sleep(1000);
-#else
-    usleep(1000000);  /* sleep for 1 Second */
-#endif
-
-    i++;
-
-    i %= 2;
-  }
-}
+    serial_puts("Hello World!");
 
 
 
