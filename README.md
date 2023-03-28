@@ -21,3 +21,11 @@ Derived from the LVGL Framebuffer Demo project and its related sub modules:
 [https://github.com/lvgl/lv_port_linux_frame_buffer.git].
 See this blog post for a step by step tutorial for deriving from scratch:
 [https://blog.lvgl.io/2018-01-03/linux_fb]
+
+
+##MSYS2 Dependencies:
+
+  - SDL2:
+    - pacman -S mingw-w64-x86_64-SDL2
+  - Serial port:
+    - pacman -S mingw-w64-x86_64-qt5-serialport

@@ -1,39 +1,40 @@
 
-
-
+// **************  Common includes
 #include "lvgl/lvgl.h"
 #include "ecu_configs.h"
-#include <unistd.h>
 
-
-#if RPI_ECU_DISPLAY
-#include "init_rpi_env.h"
-#endif // RPI_ECU_DISPLAY
-
-#if SDL_ECU_DISPLAY
-// include the lvgl header
-#include "sdl/sdl.h"
-// also include the SDL2 header
-#include "sdl.h"
-//serial port
 #include <stdio.h>
-#include "serialport.h"
-#endif  //SDL_ECU_DISPLAY
+// Serial port
+
+#include "rs232.h"
 
 
-/// Common includes
+// Widgets
 #include "bar_waterTemp.h"
 #include "meter_airPressure.h"
 #include "meter_fuelPressure.h"
 #include "meter_oilPressure.h"
 #include "meter_rpm.h"
 
+// Display drivers
+#if RPI_ECU_DISPLAY
+#include "init_rpi_env.h"
+#include <unistd.h>
+
+#elif SDL_ECU_DISPLAY 
+// include the lvgl sdl header
+#include "sdl/sdl.h"
+// also include the SDL2 header
+#include "sdl.h"
+#include "Windows.h"
+#endif  //RPI_ECU_DISPLAY elif SDL_ECU_DISPLAY
 
 
+// **************  DEFINES
 #define DISP_BUF_SIZE (128 * 1024)
 
 
-static HANDLE portHandle = NULL;
+// ************** MAIN
 
 int main(int argc, char *argv[])
 {
@@ -42,22 +43,45 @@ int main(int argc, char *argv[])
     sdl_init();
     printf("Begin main loop\n");
 
-#if serial_port
-    /// SERIAL PORT TEST
-        portHandle = openSerialPort("COM4",B115200,one,off);
-        char sendbuffer[] = "sdl_ecu_display: initialising";
-        char readbuffer[100];
-        //write test
-        int bytesWritten = writeToSerialPort(portHandle,sendbuffer,strlen(sendbuffer));
-        printf("%d Bytes were written\n",bytesWritten);
-        //read something
-        int bytesRead = readFromSerialPort(portHandle,readbuffer,99);
-        readbuffer[bytesRead]=0;
-        printf("%d Bytes were read:%s\n",bytesRead,readbuffer);
-        if(!closeSerialPort(portHandle)){
-            ErrorExit("Closing Port failed: ");
-        }
-#endif 
+{
+  int i=0,
+      cport_nr=7,        /* /dev/ttyS0 (COM1 on windows) */
+      bdrate=115200;     /* 115200 baud */
+
+  char mode[]={'8','N','1',0},
+       str[2][512];
+
+
+  strcpy(str[0], "The quick brown fox jumped over the lazy grey dog.\n");
+
+  strcpy(str[1], "Happy serial programming!\n");
+
+  if(RS232_OpenComport(cport_nr, bdrate, mode, 0))
+  {
+    printf("Can not open comport\n");
+
+    return(0);
+  }
+
+  while(1)
+  {
+    RS232_cputs(cport_nr, str[i]);
+
+    printf("sent: %s\n", str[i]);
+
+#ifdef _WIN32
+    Sleep(1000);
+#else
+    usleep(1000000);  /* sleep for 1 Second */
+#endif
+
+    i++;
+
+    i %= 2;
+  }
+}
+
+
 
 #if SDL_ECU_DISPLAY
 #define BUFFER_SIZE (SDL_HOR_RES * SDL_VER_RES)
