@@ -5,8 +5,9 @@ cmake_minimum_required(VERSION 3.12.4)
 # pacman -S mingw-w64-x86_64-SDL2
 
 # Then the following should be found by cmake:
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
+
+#find_package(SDL2 REQUIRED)
+#include_directories(${SDL2_INCLUDE_DIRS})
 
 
 
@@ -23,7 +24,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
 							PRIVATE 	lvgl 
 										lvgl::drivers
-										${SDL2_LIBRARIES}
+										#${SDL2_LIBRARIES}
 										rs232)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED 17)

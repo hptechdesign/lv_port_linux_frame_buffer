@@ -38,7 +38,10 @@ int main(int argc, char *argv[])
 {
     /*LittlevGL init*/
     lv_init();
+#if SDL_ECU_DISPLAY
     sdl_init();
+#endif
+
     printf("\nBegin main loop");
     // user selects serial port
     if(serial_init()!= 0x2)
