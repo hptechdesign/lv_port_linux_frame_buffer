@@ -80,6 +80,6 @@ void serial_puts(char* msg)
 {
     strcpy(str[t], msg);
     RS232_cputs(port, str[t]);
-    printf("sent: %s\n", str[t++]);
+    printf("\n >>> TX: %s\n", str[t++]);
     t%=2;
 }
