@@ -31,6 +31,7 @@
 #define DISP_BUF_SIZE (128 * 1024)
 
 
+
 // ************** MAIN
 
 int main(int argc, char *argv[])
@@ -38,14 +39,14 @@ int main(int argc, char *argv[])
     /*LittlevGL init*/
     lv_init();
     sdl_init();
-    printf("Begin main loop\n");
+    printf("\nBegin main loop");
+    // user selects serial port
+    if(serial_init()!= 0x2)
+    {
+        return 3;
+    }
 
-    serial_init(0);
-
-    serial_puts("Hello World!");
-
-
-
+    // set up the display driver
 #if SDL_ECU_DISPLAY
 #define BUFFER_SIZE (SDL_HOR_RES * SDL_VER_RES)
     /*A static or global variable to store the buffers*/
@@ -69,10 +70,7 @@ int main(int argc, char *argv[])
     indev_drv.read_cb = sdl_mouse_read;
     lv_indev_drv_register(&indev_drv);
 
-#endif
-
-
-#if RPI_ECU_DISPLAY
+#elif RPI_ECU_DISPLAY
 //// SETUP PI:
     /*Linux frame buffer device init*/
     fbdev_init();
@@ -108,7 +106,7 @@ int main(int argc, char *argv[])
     lv_obj_t * cursor_obj = lv_img_create(lv_scr_act()); /*Create an image object for the cursor */
     lv_img_set_src(cursor_obj, &mouse_cursor_icon);           /*Set the image source*/
     lv_indev_set_cursor(mouse_indev, cursor_obj);             /*Connect the image  object to the driver*/
-#endif // RPI_ECU_DISPLAY
+#endif // SDL(elif)RPI_ECU_DISPLAY
 
     /*Draw Widgets*/
     bar_waterTemp1();
@@ -126,6 +124,7 @@ int main(int argc, char *argv[])
         usleep(5000);
     }
 #endif  /// RPI_ECU_DISPLAY
+
 
 #if SDL_ECU_DISPLAY
     for (;;) {

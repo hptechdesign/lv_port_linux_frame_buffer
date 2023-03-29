@@ -1,8 +1,8 @@
 #include <stdio.h>
 // Serial port
-
 #include "rs232.h"
 
 
-void serial_init(int port_nr);
+
+int serial_init(void);
 void serial_puts(char* msg);
