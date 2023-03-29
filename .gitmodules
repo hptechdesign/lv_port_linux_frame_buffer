@@ -4,9 +4,6 @@
 [submodule "inc/lvgl"]
 	path = inc/lvgl
 	url = git@github.com:hptechdesign/lvgl.git
-[submodule "inc/SPinGW"]
-	path = inc/SPinGW
-	url = git@github.com:hptechdesign/SPinGW.git
 [submodule "inc/rs-232"]
 	path = inc/rs-232
 	url = git@gitlab.com:Teuniz/RS-232.git
