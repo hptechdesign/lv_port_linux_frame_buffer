@@ -1,19 +1,23 @@
-﻿/**
+/**
  * @file lv_drv_conf.h
- * Configuration file for v9.0.0-dev
+ * Configuration file for v8.3.0
  */
 
 /*
  * COPY THIS FILE AS lv_drv_conf.h
  */
 
+/// https://betterprogramming.pub/build-a-c-gui-application-with-lvgl-and-a-sdl2-as-the-backend-85a07ee94a9f
+
 /* clang-format off */
+#include "ecu_configs.h"
+
+#if SDL_ECU_DISPLAY
+
+
 #ifndef LV_DRV_CONF_H
 #define LV_DRV_CONF_H
 
-#include "ecu_configs.h"
-
-#if WIN_ECU_DISPLAY
 #include "lv_conf.h"
 
 /*********************
@@ -87,7 +91,7 @@
 
 /* SDL based drivers for display, mouse, mousewheel and keyboard*/
 #ifndef USE_SDL
-# define USE_SDL 0
+# define USE_SDL 1
 #endif
 
 /* Hardware accelerated SDL driver */
@@ -96,8 +100,8 @@
 #endif
 
 #if USE_SDL || USE_SDL_GPU
-#  define SDL_HOR_RES     480
-#  define SDL_VER_RES     320
+#  define SDL_HOR_RES     800
+#  define SDL_VER_RES     480
 
 /* Scale window by this factor (useful when simulating small screens) */
 #  define SDL_ZOOM        1
@@ -156,7 +160,7 @@
  *  Native Windows (win32drv)
  *---------------------------*/
 #ifndef USE_WIN32DRV
-#  define USE_WIN32DRV       1
+#  define USE_WIN32DRV       0
 #endif
 
 #if USE_WIN32DRV
@@ -492,4 +496,4 @@
 
 #endif  /*LV_DRV_CONF_H*/
 
-#endif //#if WIN_ECU_DISPLAY
+#endif /*End of "Content enable"*/
