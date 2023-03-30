@@ -13,18 +13,7 @@
 #include "meter_oilPressure.h"
 #include "meter_rpm.h"
 
-// Display drivers
-#if RPI_ECU_DISPLAY
-#include "init_rpi_env.h"
-#include <unistd.h>
 
-#elif SDL_ECU_DISPLAY 
-// include the lvgl sdl header
-#include "sdl/sdl.h"
-// also include the SDL2 header
-#include "sdl.h"
-#include "Windows.h"
-#endif  //RPI_ECU_DISPLAY elif SDL_ECU_DISPLAY
 
 
 // **************  DEFINES
@@ -46,7 +35,8 @@ int main(int argc, char *argv[])
     // user selects serial port
     if(serial_init()!= 0x2)
     {
-        return 3;
+        printf("Failed to initialise serial port");
+         return 3;
     }
 
     // set up the display driver
