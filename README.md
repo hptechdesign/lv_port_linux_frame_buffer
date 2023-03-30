@@ -25,9 +25,7 @@ git submodule update --init --recursive
   - SDL2 graphics drivers 
     - Required for the windows/SDL build, not needed for RPI
     - ```pacman -S mingw-w64-x86_64-SDL2```
-  - MSYS2 runtime developer tools
-    - Required for rs-232 drivers on RPI (```termios.h``` and ```sys/ioctl.h```)
-    - ```pacman -S msys2-runtime-devel ```
+
 
 
 ## RPI cross-compilation toolchain
