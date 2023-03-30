@@ -1,4 +1,7 @@
 
+
+
+
 // **************  Common includes
 #include "lvgl/lvgl.h"
 #include "ecu_configs.h"
@@ -14,12 +17,30 @@
 #include "meter_rpm.h"
 
 
+// RPI drivers
+#if RPI_ECU_DISPLAY
+#ifndef __linux__
+#define __linux__
+#endif //__linux__
+
+#include "init_rpi_env.h"
+#include <unistd.h>
+
+// Windows drivers
+#elif SDL_ECU_DISPLAY 
+// include the lvgl sdl header
+#include "sdl/sdl.h"
+// also include the SDL2 header
+#include "sdl.h"
+#include "Windows.h"
+#endif  //RPI_ECU_DISPLAY elif SDL_ECU_DISPLAY
+
 
 
 // **************  DEFINES
 #define DISP_BUF_SIZE (128 * 1024)
 
-
+static unsigned char serialBuf[4096];
 
 // ************** MAIN
 
@@ -32,7 +53,7 @@ int main(int argc, char *argv[])
 #endif
 
     printf("\nBegin main loop");
-    // user selects serial port
+    //user selects serial port
     if(serial_init()!= 0x2)
     {
         printf("Failed to initialise serial port");
@@ -109,12 +130,19 @@ int main(int argc, char *argv[])
     meter_fuelPressure();
     meter_rpm();
     
-
+int nBytes=0;
 #if RPI_ECU_DISPLAY
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
         lv_timer_handler();
         usleep(5000);
+       nBytes=serial_read();
+       if (nBytes)
+       {
+           memcpy(serialBuf, serial_getBuffer(), (size_t)nBytes);
+           printf(serialBuf);
+           nBytes=0;
+       }
     }
 #endif  /// RPI_ECU_DISPLAY
 
