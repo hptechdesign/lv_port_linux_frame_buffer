@@ -6,3 +6,5 @@
 
 int serial_init(void);
 void serial_puts(char* msg);
+int serial_read(void);
+char* serial_getBuffer();

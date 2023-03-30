@@ -10,6 +10,7 @@ static char mode[]={'8','N','1',0};
 static char msg[64];
 static char str[2][512];
 static int t=0, r=0;
+static unsigned char buf[4096];
 
 void serial_selectPort(void)
 {
@@ -34,18 +35,8 @@ void serial_selectPort(void)
         printf(msg);
       }
 #elif RPI_ECU_DISPLAY
-      printf("\nEnter a serial port number: ");
-      scanf("%d", &userInput);
-      if(userInput>=0 && userInput <100)
-      {
-          port=userInput;
-      }
-      else
-      {
-        snprintf(msg, sizeof(msg), "\n\rSelection [%3d] is not valid.\
-        Please enter a value [0-99].", userInput);
-        printf(msg);
-      }
+      printf("\nAttempting to open port 0\n");//(serial1 -> ttyAMA0)");
+      port=0;
 #endif
 
     }
@@ -68,7 +59,7 @@ int serial_init(void)
 #if SDL_ECU_DISPLAY
   snprintf(msg, sizeof(msg), "\n\rOpened port: COM%d", (port+1));
 #elif RPI_ECU_DISPLAY
-  snprintf(msg, sizeof(msg), "\n\rOpened port: %3d", port);
+  snprintf(msg, sizeof(msg), "Opened port: %3d\n", port);
 #endif
   
   printf(msg);
@@ -80,6 +71,33 @@ void serial_puts(char* msg)
 {
     strcpy(str[t], msg);
     RS232_cputs(port, str[t]);
-    printf("\n >>> TX: %s\n", str[t++]);
+    printf(">>> TX: %s\n", str[t++]);
     t%=2;
+}
+
+int serial_read(void)
+{
+  int n=0,i=0;
+    n = RS232_PollComport(port, buf, 4095);
+
+    if(n > 0)
+    {
+      buf[n] = 0;   /* always put a "null" at the end of a string! */
+
+      for(i=0; i < n; i++)
+      {
+        if(buf[i] < 32)  /* replace unreadable control-codes by dots */
+        {
+          buf[i] = '.';
+        }
+      }
+
+      printf("received %i bytes: %s\n", n, (char *)buf);
+    }
+    return n;
+}
+
+char* serial_getBuffer()
+{
+  return &buf;
 }
