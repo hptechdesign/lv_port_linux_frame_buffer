@@ -7,7 +7,7 @@
                 "${workspaceRoot}/inc/**",
                 "${workspaceRoot}/inc/lvgl/**",
                 "${workspaceRoot}/inc/lv_drivers/**",
-                "${workspaceRoot}/inc/SPinGW"
+                "${workspaceRoot}/inc/rs-232"
 
             ],
             "defines": [
