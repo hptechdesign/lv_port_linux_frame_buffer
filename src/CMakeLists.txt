@@ -14,17 +14,15 @@ cmake_minimum_required(VERSION 3.12.4)
 add_executable(${PROJECT_NAME} 
 				main.c 
 				serial.c
-				mouse_cursor_icon.c 
-				bar_waterTemp.c
-				meter_airPressure.c
-				meter_fuelPressure.c
-				meter_oilPressure.c
-				meter_rpm.c)
+				mouse_cursor_icon.c)
+
+add_subdirectory(widgets)
 
 target_link_libraries(${PROJECT_NAME} 
 							PRIVATE 	lvgl 
 										lvgl::drivers
 										#${SDL2_LIBRARIES}
-										rs232)
+										rs232
+										widgets)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED 17)

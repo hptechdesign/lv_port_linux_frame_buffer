@@ -10,11 +10,11 @@
 
 
 // Widgets
-#include "bar_waterTemp.h"
-#include "meter_airPressure.h"
-#include "meter_fuelPressure.h"
-#include "meter_oilPressure.h"
-#include "meter_rpm.h"
+#include "widgets/bar_waterTemp.h"
+#include "widgets/meter_airPressure.h"
+#include "widgets/meter_fuelPressure.h"
+#include "widgets/meter_oilPressure.h"
+#include "widgets/meter_rpm.h"
 
 
 // RPI drivers

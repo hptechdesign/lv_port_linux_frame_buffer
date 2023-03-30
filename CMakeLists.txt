@@ -35,6 +35,7 @@ add_subdirectory(inc/lv_drivers)
 add_subdirectory(inc/rs-232)
 add_subdirectory(src)
 
+
 # this next command generates a compile_command.json file for intellisense to recognise
 # the add_compile_definitions used. Note: used by Ninja and Makefile generators, check others
 #target_compile_definitions(rpi_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)

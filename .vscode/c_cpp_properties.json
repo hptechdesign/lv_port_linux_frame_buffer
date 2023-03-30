@@ -7,7 +7,8 @@
                 "${workspaceRoot}/inc/**",
                 "${workspaceRoot}/inc/lvgl/**",
                 "${workspaceRoot}/inc/lv_drivers/**",
-                "${workspaceRoot}/inc/rs-232"
+                "${workspaceRoot}/inc/rs-232",
+                "${workspaceRoot}/src/widgets"
 
             ],
             "defines": [
