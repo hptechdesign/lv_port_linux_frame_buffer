@@ -142,39 +142,39 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
 
     if(rx_sensor_data[map_delimit]=='P')
     {
-      rx_buffer->manifold_pressure_mbar= rx_sensor_data[manifold_pressure_x1000];
-      rx_buffer->manifold_pressure_mbar+= rx_sensor_data[manifold_pressure_x100];
-      rx_buffer->manifold_pressure_mbar+= rx_sensor_data[manifold_pressure_x10];
+      rx_buffer->manifold_pressure_mbar= rx_sensor_data[manifold_pressure_x1000]*1000;
+      rx_buffer->manifold_pressure_mbar+= rx_sensor_data[manifold_pressure_x100]*100;
+      rx_buffer->manifold_pressure_mbar+= rx_sensor_data[manifold_pressure_x10]*10;
     }
 
     if(rx_sensor_data[temperature_delimit_a] == 'T' &&
        rx_sensor_data[temperature_a_delimit] == 'A')
     {
-      rx_buffer->temperature_a_degC= rx_sensor_data[temperature_a_x100];
-      rx_buffer->temperature_a_degC+= rx_sensor_data[temperature_a_x10];
+      rx_buffer->temperature_a_degC= rx_sensor_data[temperature_a_x100]*100;
+      rx_buffer->temperature_a_degC+= rx_sensor_data[temperature_a_x10]*10;
       rx_buffer->temperature_a_degC+= rx_sensor_data[temperature_a_x1];
     }
 
     if(rx_sensor_data[temperature_delimit_b] == 'T' &&
        rx_sensor_data[temperature_b_delimit] == 'B')
     {
-      rx_buffer->temperature_b_degC= rx_sensor_data[temperature_b_x100];
-      rx_buffer->temperature_b_degC+= rx_sensor_data[temperature_b_x10];
+      rx_buffer->temperature_b_degC= rx_sensor_data[temperature_b_x100]*100;
+      rx_buffer->temperature_b_degC+= rx_sensor_data[temperature_b_x10]*10;
       rx_buffer->temperature_b_degC+= rx_sensor_data[temperature_b_x1];
     }
 
     if(rx_sensor_data[oil_pressure_delimit] == 'P' )
     {
-      rx_buffer->oil_pressure_mbar= rx_sensor_data[oil_pressure_x1000];
-      rx_buffer->oil_pressure_mbar+= rx_sensor_data[oil_pressure_x100];
-      rx_buffer->oil_pressure_mbar+= rx_sensor_data[oil_pressure_x10];
+      rx_buffer->oil_pressure_mbar= rx_sensor_data[oil_pressure_x1000]*1000;
+      rx_buffer->oil_pressure_mbar+= rx_sensor_data[oil_pressure_x100]*100;
+      rx_buffer->oil_pressure_mbar+= rx_sensor_data[oil_pressure_x10]*10;
     }
 
     if(rx_sensor_data[fuel_pressure_delimit] == 'D' )
     {
-      rx_buffer->fuel_pressure_bar= rx_sensor_data[fuel_pressure_x1000];
-      rx_buffer->fuel_pressure_bar+= rx_sensor_data[fuel_pressure_x100];
-      rx_buffer->fuel_pressure_bar+= rx_sensor_data[fuel_pressure_x10];
+      rx_buffer->fuel_pressure_bar= rx_sensor_data[fuel_pressure_x1000]*1000;
+      rx_buffer->fuel_pressure_bar+= rx_sensor_data[fuel_pressure_x100]*100;
+      rx_buffer->fuel_pressure_bar+= rx_sensor_data[fuel_pressure_x10]*10;
     }
 
     //rx_sensor_data[intake_airflow_delimit];
