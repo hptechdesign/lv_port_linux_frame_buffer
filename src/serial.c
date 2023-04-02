@@ -135,9 +135,9 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
 
     if(rx_sensor_data[crank_rpm_delimit]=='A')
     {
-      rx_buffer->crank_rpm=rx_sensor_data[crank_rpm_x1000];
-      rx_buffer->crank_rpm+=rx_sensor_data[crank_rpm_x100];
-      rx_buffer->crank_rpm+=rx_sensor_data[crank_rpm_x10];
+      rx_buffer->crank_rpm=rx_sensor_data[crank_rpm_x1000]*1000;
+      rx_buffer->crank_rpm+=rx_sensor_data[crank_rpm_x100]*100;
+      rx_buffer->crank_rpm+=rx_sensor_data[crank_rpm_x10]*10;
     }
 
     if(rx_sensor_data[map_delimit]=='P')
