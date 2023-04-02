@@ -140,7 +140,7 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
       rx_buffer->crank_rpm+=rx_sensor_data[crank_rpm_x10]*10;
     }
 
-    if(rx_sensor_data[map_delimit]=='P')
+    if(rx_sensor_data[map_delimit]=='M')
     {
       rx_buffer->manifold_pressure_mbar= rx_sensor_data[manifold_pressure_x1000]*1000;
       rx_buffer->manifold_pressure_mbar+= rx_sensor_data[manifold_pressure_x100]*100;
