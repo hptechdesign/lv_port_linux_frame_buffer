@@ -33,7 +33,7 @@ void meter_fuelPressure(void)
     lv_meter_set_scale_major_ticks(meter, scale, 8, 4, 15, lv_color_black(), 15);
     lv_obj_set_style_text_font(meter,  METER_FUELP_FONT, LV_PART_MAIN);
 
-    lv_meter_indicator_t * indic;
+
 
     /*Add a blue arc to the start*/
     indic = lv_meter_add_arc(meter, scale, 3, lv_palette_main(LV_PALETTE_BLUE), 0);
