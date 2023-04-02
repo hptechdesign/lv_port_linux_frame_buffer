@@ -1,6 +1,7 @@
 # ECU Display running on RPi
 
-LVGL configured to work with /dev/fb0 on Linux.
+LVGL configured to work with /dev/fb0 on Linux. Also compiles as a windows simulator - see
+instructions at bottom.
 
 When cloning this repository, also make sure to download submodules (`git submodule update --init --recursive`) otherwise you will be missing key components.
 
@@ -44,12 +45,24 @@ Using this information you should be able to modify the rpi_ecu_display project'
   - Delete the top-level ```CMakeLists.txt``` file
   - Copy and rename ```CMakeListsSDL.txt``` to ```CMakeLists.txt```
   - Open ```ecu_configs.h```, set ```SDL_ECU_DISPLAY=1``` and ```RPI_ECU_DISPLAY=0```
+  - Open src/CMakeLists.txt and uncomment the following lines:
+  ```
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+  ```
+  - Also uncomment the ```${SDL2_LIBRARIES}``` line in the  ```target_link_libraries``` command
 
 
 ### For RPI
   - Delete the top-level ```CMakeLists.txt``` file
   - Copy and rename ```CMakeListsRPI.txt``` to ```CMakeLists.txt```
   - Open ```ecu_configs.h```, set ```RPI_ECU_DISPLAY=1``` and ```SDL_ECU_DISPLAY=0```
+    - Open src/CMakeLists.txt and comment out the following lines:
+  ```
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+  ```
+  - Also comment out the ```${SDL2_LIBRARIES}``` line in the  ```target_link_libraries``` command
 
 ----
 

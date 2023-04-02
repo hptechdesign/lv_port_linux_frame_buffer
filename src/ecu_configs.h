@@ -1,6 +1,6 @@
 
-#define RPI_ECU_DISPLAY 1
-#define SDL_ECU_DISPLAY 0
+#define RPI_ECU_DISPLAY 0
+#define SDL_ECU_DISPLAY 1
 
 /****************** Drivers  *************/
 #if ((RPI_ECU_DISPLAY + SDL_ECU_DISPLAY) != 1)
