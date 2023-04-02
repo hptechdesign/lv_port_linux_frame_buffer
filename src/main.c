@@ -33,6 +33,7 @@
 // also include the SDL2 header
 #include "sdl.h"
 #include "Windows.h"
+#include "unistd.h"
 #endif  //RPI_ECU_DISPLAY elif SDL_ECU_DISPLAY
 
 
@@ -54,7 +55,8 @@ int main(int argc, char *argv[])
 
     printf("\nBegin main loop");
     //user selects serial port
-    if(serial_init()!= 0x2)
+    serial_modes_t mode = serial_init();
+    if((mode != mode_ascii) && (mode!=mode_stream_data))
     {
         printf("Failed to initialise serial port");
          return 3;
@@ -153,6 +155,7 @@ int nBytes=0;
         lv_tick_inc(1);
         lv_timer_handler();
         usleep(1000);
+        sensor_getData();
     }
 #endif // SDL_ECU_DISPLAY
 

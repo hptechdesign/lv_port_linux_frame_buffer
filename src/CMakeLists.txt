@@ -13,6 +13,7 @@ include_directories(${SDL2_INCLUDE_DIRS})
 add_executable(${PROJECT_NAME} 
 				main.c 
 				serial.c
+				sensor.c
 				mouse_cursor_icon.c)
 
 add_subdirectory(widgets)

@@ -13,6 +13,7 @@
     "meter_airpressure.h": "c",
     "meter_fuelpressure.h": "c",
     "sdl.h": "c",
-    "bar_watertemp.h": "c"
+    "bar_watertemp.h": "c",
+    "serial.h": "c"
 }
 }
