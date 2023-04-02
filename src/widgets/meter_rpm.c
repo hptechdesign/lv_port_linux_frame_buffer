@@ -3,10 +3,18 @@
 #include <stdio.h>
 
 static lv_obj_t * meter;
+static lv_meter_indicator_t * indic;
 
 static void set_value(void * indic, int32_t v)
 {
+    #if ANIMATION_ENABLED
     lv_meter_set_indicator_value(meter, indic, v);
+    #endif
+}
+
+void meter_rpmSetValue(uint16_t value)
+{
+    lv_meter_set_indicator_value(meter, indic, (int)value);
 }
 
 /**
@@ -24,7 +32,7 @@ void meter_rpm(void)
     lv_meter_set_scale_ticks(meter, scale, 41, 2, 10, lv_palette_main(LV_PALETTE_GREY));
     lv_meter_set_scale_major_ticks(meter, scale, 8, 4, 15, lv_color_black(), 15);
 
-    lv_meter_indicator_t * indic;
+    
 
     /*Add a blue arc to the start*/
     indic = lv_meter_add_arc(meter, scale, 3, lv_palette_main(LV_PALETTE_BLUE), 0);
@@ -60,6 +68,7 @@ void meter_rpm(void)
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_pos(label1, METER_RPM_XPOS, METER_RPM_YPOS+METER_RPM_SIZE-45);
 
+#if ANIMATION_ENABLED
     /*Create an animation to set the value*/
     lv_anim_t a;
     lv_anim_init(&a);
@@ -72,6 +81,7 @@ void meter_rpm(void)
     lv_anim_set_playback_delay(&a, 100);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
+#endif
 }
 
 

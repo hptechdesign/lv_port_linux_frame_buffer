@@ -158,9 +158,13 @@ int nBytes=0;
         // poll for serial data
         sensor_getData();
         // update widgets
+        
+        bar_waterTempASetValue(sensor_getTemperatureA());
+        bar_waterTempBSetValue(sensor_getTemperatureB());
         meter_airPressureSetValue(sensor_getManifoldPressure());
-        set_barWaterTempASetValue(sensor_getTemperatureA());
-        set_barWaterTempBSetValue(sensor_getTemperatureB());
+        meter_fuelPressureSetValue(sensor_getFuelPressure());
+        meter_oilPressureSetValue(sensor_getOilPressure());
+        meter_rpmSetValue(sensor_getCrankRpm());
     }
 #endif // SDL_ECU_DISPLAY
 

@@ -6,12 +6,14 @@
 lv_obj_t * barA;
 lv_obj_t * barB; 
 
-void set_barWaterTempASetValue(uint16_t val)
+static void set_value(void * bar, int32_t v);
+
+void bar_waterTempASetValue(uint16_t val)
 {
     lv_bar_set_value(barA, val, LV_ANIM_OFF);
 }
 
-void set_barWaterTempBSetValue(uint16_t val)
+void bar_waterTempBSetValue(uint16_t val)
 {
     lv_bar_set_value(barB, val, LV_ANIM_OFF);
 }
@@ -94,6 +96,7 @@ void bar_waterTemp1(void)
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_pos(label1, BAR_WATERTEMP1_XPOS, BAR_WATERTEMP1_YPOS+BAR_WATERTEMP_SIZEY+5);
 
+    #if ANIMATION_ENABLED
     // Animate
     lv_anim_t a;
     lv_anim_init(&a);
@@ -104,6 +107,7 @@ void bar_waterTemp1(void)
     lv_anim_set_playback_time(&a, 500);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
+    #endif
 
 }
 

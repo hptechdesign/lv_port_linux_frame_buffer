@@ -10,3 +10,4 @@
 
 
 void meter_rpm(void);
+void meter_rpmSetValue(uint16_t value);

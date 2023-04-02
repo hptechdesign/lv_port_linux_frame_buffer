@@ -23,5 +23,5 @@
 void bar_waterTemp1(void);
 void bar_waterTemp2(void);
 
-void set_barWaterTempASetValue(uint16_t val);
-void set_barWaterTempBSetValue(uint16_t val);
+void bar_waterTempASetValue(uint16_t val);
+void bar_waterTempBSetValue(uint16_t val);

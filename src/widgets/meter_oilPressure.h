@@ -16,3 +16,4 @@
 #define LABEL_OILP_FONT &lv_font_montserrat_14
 
 void meter_oilPressure(void);
+void meter_oilPressureSetValue(uint16_t value);

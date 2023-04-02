@@ -3,10 +3,18 @@
 #include <stdio.h>
 
 static lv_obj_t * meter;
+static lv_meter_indicator_t * indic;
 
 static void set_value(void * indic, int32_t v)
 {
+    #if ANIMATION_ENABLED
     lv_meter_set_indicator_value(meter, indic, v);
+    #endif
+}
+
+void meter_oilPressureSetValue(uint16_t value)
+{
+    lv_meter_set_indicator_value(meter, indic, (int)value);
 }
 
 /**
@@ -25,7 +33,7 @@ void meter_oilPressure(void)
     lv_meter_set_scale_major_ticks(meter, scale, 8, 4, 15, lv_color_black(), 15);
     lv_obj_set_style_text_font(meter,  METER_OILP_FONT, LV_PART_MAIN);
 
-    lv_meter_indicator_t * indic;
+    
 
     /*Add a blue arc to the start*/
     indic = lv_meter_add_arc(meter, scale, 3, lv_palette_main(LV_PALETTE_BLUE), 0);
@@ -62,6 +70,7 @@ void meter_oilPressure(void)
     lv_obj_set_pos(label1, METER_OILP_XPOS, METER_OILP_YPOS+METER_OILP_SIZE-METER_OILP_LABEL_YOFFSET);
     lv_obj_set_style_text_font(label1, LABEL_OILP_FONT, LV_PART_MAIN);
 
+#if ANIMATION_ENABLED
     /*Create an animation to set the value*/
     lv_anim_t a;
     lv_anim_init(&a);
@@ -74,6 +83,7 @@ void meter_oilPressure(void)
     lv_anim_set_playback_delay(&a, 100);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
+#endif
 }
 
 

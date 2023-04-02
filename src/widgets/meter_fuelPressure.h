@@ -17,3 +17,4 @@
 
 
 void meter_fuelPressure(void);
+void meter_fuelPressureSetValue(uint16_t value);
