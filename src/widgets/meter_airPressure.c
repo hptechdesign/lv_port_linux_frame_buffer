@@ -1,12 +1,22 @@
 #include "lvgl/lvgl.h"
+#include "ecu_configs.h"
 #include "meter_airPressure.h"
 #include <stdio.h>
 
 static lv_obj_t * meter;
+static lv_meter_indicator_t * indic;
+
+
+void meter_airPressureSetValue(uint16_t value)
+{
+    lv_meter_set_indicator_value(meter, indic, (int)value);
+}
 
 static void set_value(void * indic, int32_t v)
 {
+    #if ANIMATION_ENABLED
     lv_meter_set_indicator_value(meter, indic, v);
+    #endif
 }
 
 /**
@@ -62,6 +72,7 @@ void meter_airPressure(void)
     lv_obj_set_pos(label1, METER_AIRP_XPOS, METER_AIRP_YPOS+METER_AIRP_SIZE-METER_AIRP_LABEL_YOFFSET);
     lv_obj_set_style_text_font(label1, LABEL_AIRP_FONT, LV_PART_MAIN);
 
+#if ANIMATION_ENABLED
     /*Create an animation to set the value*/
     lv_anim_t a;
     lv_anim_init(&a);
@@ -74,6 +85,7 @@ void meter_airPressure(void)
     lv_anim_set_playback_delay(&a, 100);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
+#endif
 }
 
 

@@ -155,7 +155,12 @@ int nBytes=0;
         lv_tick_inc(1);
         lv_timer_handler();
         usleep(1000);
+        // poll for serial data
         sensor_getData();
+        // update widgets
+        meter_airPressureSetValue(sensor_getManifoldPressure());
+        set_barWaterTempASetValue(sensor_getTemperatureA());
+        set_barWaterTempBSetValue(sensor_getTemperatureB());
     }
 #endif // SDL_ECU_DISPLAY
 

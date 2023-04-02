@@ -16,3 +16,4 @@
 #define LABEL_AIRP_FONT &lv_font_montserrat_14
 
 void meter_airPressure(void);
+void meter_airPressureSetValue(uint16_t value);

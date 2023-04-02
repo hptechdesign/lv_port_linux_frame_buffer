@@ -2,9 +2,26 @@
 #include "bar_waterTemp.h"
 #include <stdio.h>
 
+
+lv_obj_t * barA;
+lv_obj_t * barB; 
+
+void set_barWaterTempASetValue(uint16_t val)
+{
+    lv_bar_set_value(barA, val, LV_ANIM_OFF);
+}
+
+void set_barWaterTempBSetValue(uint16_t val)
+{
+    lv_bar_set_value(barB, val, LV_ANIM_OFF);
+}
+
+
 static void set_value(void * bar, int32_t v)
 {
+    #if ANIMATION_ENABLED
     lv_bar_set_value(bar, v, LV_ANIM_OFF);
+    #endif
 }
 
 static void event_cb(lv_event_t * e)
@@ -61,12 +78,12 @@ void bar_waterTemp1(void)
     lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_RED));
     lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_HOR);
 
-    lv_obj_t * bar = lv_bar_create(lv_scr_act());
-    lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
-    lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
-    lv_obj_set_size(bar, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
-    lv_obj_set_pos(bar,BAR_WATERTEMP1_XPOS,BAR_WATERTEMP1_YPOS);
-    lv_bar_set_range(bar, 0, 150);
+    barA = lv_bar_create(lv_scr_act());
+    lv_obj_add_style(barA, &style_indic, LV_PART_INDICATOR);
+    lv_obj_add_event_cb(barA, event_cb, LV_EVENT_DRAW_PART_END, NULL);
+    lv_obj_set_size(barA, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
+    lv_obj_set_pos(barA,BAR_WATERTEMP1_XPOS,BAR_WATERTEMP1_YPOS);
+    lv_bar_set_range(barA, 0, 150);
 
     // Draw label
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
@@ -80,7 +97,7 @@ void bar_waterTemp1(void)
     // Animate
     lv_anim_t a;
     lv_anim_init(&a);
-    lv_anim_set_var(&a, bar);
+    lv_anim_set_var(&a, barA);
     lv_anim_set_values(&a, 80, 110);
     lv_anim_set_exec_cb(&a, set_value);
     lv_anim_set_time(&a, 10000);
@@ -100,12 +117,12 @@ void bar_waterTemp2(void)
     lv_style_set_bg_grad_color(&style_indic, lv_palette_main(LV_PALETTE_RED));
     lv_style_set_bg_grad_dir(&style_indic, LV_GRAD_DIR_HOR);
 
-    lv_obj_t * bar = lv_bar_create(lv_scr_act());
-    lv_obj_add_style(bar, &style_indic, LV_PART_INDICATOR);
-    lv_obj_add_event_cb(bar, event_cb, LV_EVENT_DRAW_PART_END, NULL);
-    lv_obj_set_size(bar, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
-    lv_obj_set_pos(bar,BAR_WATERTEMP2_XPOS,BAR_WATERTEMP2_YPOS);
-    lv_bar_set_range(bar, 0, 150);
+    barB = lv_bar_create(lv_scr_act());
+    lv_obj_add_style(barB, &style_indic, LV_PART_INDICATOR);
+    lv_obj_add_event_cb(barB, event_cb, LV_EVENT_DRAW_PART_END, NULL);
+    lv_obj_set_size(barB, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
+    lv_obj_set_pos(barB,BAR_WATERTEMP2_XPOS,BAR_WATERTEMP2_YPOS);
+    lv_bar_set_range(barB, 0, 150);
 
     // Draw label
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
@@ -116,15 +133,17 @@ void bar_waterTemp2(void)
     lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_pos(label1, BAR_WATERTEMP2_XPOS, BAR_WATERTEMP2_YPOS+BAR_WATERTEMP_SIZEY+5);
 
+    #if ANIMATION_ENABLED
     // Animate
     lv_anim_t a;
     lv_anim_init(&a);
-    lv_anim_set_var(&a, bar);
+    lv_anim_set_var(&a, barB);
     lv_anim_set_values(&a, 80, 120);
     lv_anim_set_exec_cb(&a, set_value);
     lv_anim_set_time(&a, 8000);
     lv_anim_set_playback_time(&a, 500);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
+    #endif
 
 }
