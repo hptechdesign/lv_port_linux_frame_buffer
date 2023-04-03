@@ -28,7 +28,7 @@ SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
 project(sdl_ecu_display)
 
-include_directories(inc inc/SPinGW src)
+include_directories(inc inc/rs-232 src)
 
 add_subdirectory(inc/lvgl)
 add_subdirectory(inc/lv_drivers)
