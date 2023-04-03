@@ -1,43 +1,32 @@
-
+/**
+ * @file serial.h
+ * @brief Serial port functions for ecu_display and sensor_spoofer
+ *
+ */
 
 #ifndef _SERIAL_H
 #define _SERIAL_H
 
-// Serial port
-#include "rs232.h"
+/* Includes */
 #include "sensor.h"
+#include "rs232.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 
+/* Public macros and typedefs */
 #define CONTROL_FRAME_SIZE 11
 #define SENSOR_FRAME_SIZE 33
 
 
-/* Typedefs - Consider hiding these implementation details, export a pointer instead */
-typedef struct control_data{
-	uint16_t fire_angle_deg;
-	float injector_duty_ms;			// consider other formats e.g fixed point
-	float peak_hold_ms;				// consider other formats
-}control_data_t;
 
-typedef struct sensor_data{
-	uint16_t crank_rpm;
-	uint16_t manifold_pressure_mbar;
-	uint16_t temperature_a_degC;
-	uint16_t temperature_b_degC;
-	uint16_t oil_pressure_mbar;
-	uint16_t fuel_pressure_bar;
-}sensor_data_t;
-
+/* Public typedefs and enums*/
 typedef enum {
 	mode_startup,
 	mode_select_port,
 	mode_ascii,
 	mode_stream_data
 }serial_modes_t;
-
-
 
 typedef  enum {			//  Units:
 	fire_angle_delimit,		// N/A
@@ -89,16 +78,17 @@ typedef  enum {
 	sensor_crc_byte2
 }sensor_data_byte_t;
 
-
+/* Public function prototypes */
 int serial_init(void);
-void serial_puts(char* msg);
-int serial_readAscii(void);
-char* serial_getAsciiBuffer();
 
 //rpi_ecu_display:
 void serial_getSensorData(sensor_data_t* rx_buffer);
 //ecu_sensor_spoofer:
 void serial_sendSensorPacket(void);
 
+/* Ascii text string functions*/
+void serial_puts(char* msg);
+int serial_readAscii(void);
+char* serial_getAsciiBuffer();
 
 #endif //_SERIAL_H

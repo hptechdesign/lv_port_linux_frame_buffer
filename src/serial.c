@@ -1,7 +1,17 @@
+/**
+ * @file serial.c
+ * @brief Serial port functions for ecu_display and sensor_spoofer
+ *
+ */
 
+/* Includes */
 #include "ecu_configs.h"
 #include "serial.h"
 #include "sensor.h"
+
+/* Private macros and typedefs */
+typedef unsigned char BYTE;
+
 
 // Private functions
 void serial_selectPort(void);
@@ -19,7 +29,6 @@ static char str[2][512];
 static int t=0, r=0;
 static char buf[4096];
 
-typedef unsigned char BYTE;
 // Buffers for control & sensor data packets
 // this buffer used in ECU_SENSOR_SPOOFER -- ifdef them out at some point
 static BYTE tx_sensor_data[SENSOR_FRAME_SIZE];
@@ -29,9 +38,9 @@ static BYTE rx_control_data[CONTROL_FRAME_SIZE];
 static BYTE rx_sensor_data[SENSOR_FRAME_SIZE];
 static BYTE tx_control_data[CONTROL_FRAME_SIZE];
 
+
+
 static serial_modes_t serial_mode;
-
-
 static BOOL tx_in_progress=FALSE;
 static BOOL rx_in_progress=FALSE;
 
@@ -127,6 +136,19 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
 {
   if(serial_mode==mode_stream_data)
   {
+    int rx_bytes=0;
+    BYTE byteBuf='0';
+    #warning introduced a while loop here which might lock up!! consider exceptions
+    while (rx_bytes<SENSOR_FRAME_SIZE)
+    {
+      if (RS232_PollComport(port, &byteBuf, 1)==1 && byteBuf == 'S')
+      {
+        rx_sensor_data[0]=byteBuf; rx_bytes++;
+      }else
+      {
+        rx_bytes+=RS232_PollComport(port, &byteBuf, SENSOR_FRAME_SIZE-rx_bytes);
+      }
+    }
     RS232_PollComport(port, &rx_sensor_data[0], SENSOR_FRAME_SIZE);
 
     // check CRC here
@@ -197,9 +219,10 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
 
 int serial_init(void)
 {
+  // user selects serial port
   serial_mode = mode_select_port;
   serial_selectPort();
-
+  // open the selected port
   if(RS232_OpenComport(port, bdrate, mode, 0))
   {
     printf("Can not open comport\n");
@@ -208,19 +231,18 @@ int serial_init(void)
   }
 
   // serial splash message
-#if SDL_ECU_DISPLAY || ECU_SENSOR_SPOOFER
+  #if SDL_ECU_DISPLAY || ECU_SENSOR_SPOOFER
   snprintf(msg, sizeof(msg), "\n\rOpened port: COM%d\n", (port+1));
-#elif RPI_ECU_DISPLAY
+  #elif RPI_ECU_DISPLAY
   snprintf(msg, sizeof(msg), "Opened port: %3d\n", port);
-#endif
-  
+  #endif
   printf(msg);
   serial_puts(msg);
 
-  // select serial port
+  // user selects serial mode
   int userInput = 0;
   printf("Select test mode - 1=ASCII, 2=ECU_Data: ");
-while (scanf("%d", &userInput) != 1) 
+  while (scanf("%d", &userInput) != 1) 
   {
       printf("Please enter a value [1 or 2].\n");
   };
@@ -245,9 +267,6 @@ while (scanf("%d", &userInput) != 1)
   }
   return(serial_mode);
 }
-
-
-
 
 
 /**

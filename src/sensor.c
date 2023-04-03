@@ -1,6 +1,17 @@
+/**
+ * @file sensor.c
+ * @brief Store or serve sensor data.
+ *
+ * Sensor values can be spoofed using sensor_generateData().
+ * Serial module uses the sensor_setXxx() commands to store the data in private structs.
+ * Application software uses the sensor_getXxxx() commands to retrieve stored data.
+ */
+
+/* Includes */
 #include "sensor.h"
 #include "serial.h"
 
+/* Private macros */
 static control_data_t control_data =
 {
 	.fire_angle_deg= 15,
@@ -9,14 +20,21 @@ static control_data_t control_data =
 };
 static sensor_data_t sensor_data =
 {
-	.crank_rpm = 0,
-	.manifold_pressure_mbar = 0,
-	.temperature_a_degC = 0,
-	.temperature_b_degC = 0,
-	.oil_pressure_mbar = 0,
-	.fuel_pressure_bar = 0
+	.crank_rpm = 1234,
+	.manifold_pressure_mbar = 9123,
+	.temperature_a_degC = 123,
+	.temperature_b_degC = 912,
+	.oil_pressure_mbar = 1234,
+	.fuel_pressure_bar = 2345
 };
 
+/* Private function prototypes */
+void sensor_generateData(void);
+void sensor_getData(void);
+
+/* Global variables */
+
+/* Private functions */
 
 // this function is used in the spoofer
 void sensor_generateData(void)
@@ -28,20 +46,18 @@ void sensor_generateData(void)
 	sensor_setTemperatureB(87);
 	sensor_setOilPressure(967);
 	sensor_setFuelPressure(2745);
-
 }
 
 // this function is used in rpi_ecu_display
 void sensor_getData(void)
 {
 	serial_getSensorData(&sensor_data);
-
-
 }
 
+/* Public functions */
 
 
-/************************** GET SENSOR DATA *******************************************/
+/* Getters */
 
 uint16_t sensor_getCrankRpm(void)
 {
@@ -73,7 +89,7 @@ uint16_t sensor_getFuelPressure(void)
 	return sensor_data.fuel_pressure_bar; 
 }
 
-/************************** SET SENSOR DATA *******************************************/
+/* Setters */
 
 void sensor_setCrankRpm(uint16_t rpm)
 {
