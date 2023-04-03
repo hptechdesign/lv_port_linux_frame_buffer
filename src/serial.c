@@ -74,7 +74,7 @@ void serial_encapsulateSensorData(void)
 {
   if(tx_in_progress== FALSE)
   {
-    tx_sensor_data[crank_rpm_delimit] = 'A';
+    tx_sensor_data[crank_rpm_delimit] = 'S';
     tx_sensor_data[crank_rpm_x1000] = (BYTE) (sensor_getCrankRpm()/1000);
     tx_sensor_data[crank_rpm_x100] = (BYTE) ((sensor_getCrankRpm()%1000)/100);
     tx_sensor_data[crank_rpm_x10] = (BYTE) ((sensor_getCrankRpm()%100)/10);
@@ -136,17 +136,22 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
 {
   if(serial_mode==mode_stream_data)
   {
-    int rx_bytes=0;
+    int rx_bytes=0, timeout=0;
     BYTE byteBuf='0';
     #warning introduced a while loop here which might lock up!! consider exceptions
-    while (rx_bytes<SENSOR_FRAME_SIZE)
+    while (rx_bytes<SENSOR_FRAME_SIZE && timeout<0xFFFFF)
     {
+      // look for the first delimiter
       if (RS232_PollComport(port, &byteBuf, 1)==1 && byteBuf == 'S')
       {
         rx_sensor_data[0]=byteBuf; rx_bytes++;
-      }else
+      }// after the first byte is received, look for bigger chunks
+      else if(rx_bytes>0)
       {
         rx_bytes+=RS232_PollComport(port, &byteBuf, SENSOR_FRAME_SIZE-rx_bytes);
+      }else
+      {
+        timeout++;
       }
     }
     RS232_PollComport(port, &rx_sensor_data[0], SENSOR_FRAME_SIZE);
@@ -155,7 +160,7 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
     // rx_sensor_data[sensor_crc_byte1];
     // rx_sensor_data[sensor_crc_byte2];
 
-    if(rx_sensor_data[crank_rpm_delimit]=='A')
+    if(rx_sensor_data[crank_rpm_delimit]=='S')
     {
       rx_buffer->crank_rpm=rx_sensor_data[crank_rpm_x1000]*1000;
       rx_buffer->crank_rpm+=rx_sensor_data[crank_rpm_x100]*100;
