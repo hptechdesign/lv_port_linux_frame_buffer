@@ -139,22 +139,30 @@ void serial_getSensorData(sensor_data_t* rx_buffer)
     int rx_bytes=0, timeout=0;
     BYTE byteBuf='0';
     #warning introduced a while loop here which might lock up!! consider exceptions
-    while (rx_bytes<SENSOR_FRAME_SIZE && timeout<0xFFFFF)
+    while (rx_bytes<(SENSOR_FRAME_SIZE-1) && timeout<0xFFFFF)
     {
       // look for the first delimiter
       if (RS232_PollComport(port, &byteBuf, 1)==1 && byteBuf == 'S')
       {
-        rx_sensor_data[0]=byteBuf; rx_bytes++;
+        rx_sensor_data[0]=byteBuf;
+        rx_bytes=1;
       }// after the first byte is received, look for bigger chunks
       else if(rx_bytes>0)
       {
-        rx_bytes+=RS232_PollComport(port, &byteBuf, SENSOR_FRAME_SIZE-rx_bytes);
+        rx_bytes+=RS232_PollComport(port, &rx_sensor_data[rx_bytes], (SENSOR_FRAME_SIZE-1-rx_bytes));
       }else
       {
-        timeout++;
+        if (timeout == 0)
+        {
+          //nothing in serial buffer - give up immediately
+          break;
+        }
+        else
+        {
+          timeout++;
+        }
       }
     }
-    RS232_PollComport(port, &rx_sensor_data[0], SENSOR_FRAME_SIZE);
 
     // check CRC here
     // rx_sensor_data[sensor_crc_byte1];
