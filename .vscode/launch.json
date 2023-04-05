@@ -62,6 +62,10 @@
 		{
 			"name": "win_ecu_display/ecu_sensor_spoofer",
 			"configurations": ["win_ecu_display","ecu_sensor_spoofer"]
+		},
+		{
+			"name": "rpi_ecu_display/ecu_sensor_spoofer",
+			"configurations": ["rpi_ecu_display","ecu_sensor_spoofer"]
 		}
 	  ]
 }
