@@ -11,7 +11,7 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} 
-				main.c 
+				main_display.c 
 				serial.c
 				sensor.c
 				mouse_cursor_icon.c)
@@ -25,4 +25,12 @@ target_link_libraries(${PROJECT_NAME}
 										rs232
 										widgets)
 
+add_executable(ecu_sensor_spoofer 
+								main_spoofer.c 
+								serial.c
+								sensor.c)
+						
+						
+target_link_libraries(ecu_sensor_spoofer PRIVATE rs232)
+						
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED 17)

@@ -6,10 +6,10 @@
 	"configurations": [
 
 		{
-		  "name": "GDB debug SDL_ECU_Display",
+		  "name": "GDB debug win_ecu_display",
 		  "type": "cppdbg",
 		  "request": "launch",
-		  "program": "${workspaceFolder}/build/src/sdl_ecu_display.exe",
+		  "program": "${workspaceFolder}/build/win_ecu_display.exe",
 		  "args": [],
 		  "stopAtEntry": false,
 		  "cwd": "${fileDirname}",
@@ -29,13 +29,33 @@
 		"type": "gdb",
 		"request": "attach",
 		"name": "Attach to gdbserver",
-		"executable": "./build/src/rpi_ecu_display",
+		"executable": "./build/rpi_ecu_display",
 		"target": "192.168.0.115:9999",
 		"remote": true,
 		"cwd": "${workspaceRoot}", 
 		"gdbpath": "arm-linux-gnueabihf-gdb.exe",
 		//"preLaunchTask": "Transfer to RPI and Start GDB server",
 		//"postDebugTask": "Kill GDB server"
-	}
+		},
+		{
+			"name": "GDB debug ecu_sensor_spoofer",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/build/ecu_sensor_spoofer.exe",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": true,
+			"MIMode": "gdb",
+		  "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+		  "setupCommands": [
+		  {
+			"description": "Enable pretty-printing for gdb",
+			"text": "-enable-pretty-printing",
+			"ignoreFailures": true
+		  },
+		 ]
+		},
 	  ],
 }

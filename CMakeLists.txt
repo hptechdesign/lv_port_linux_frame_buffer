@@ -26,7 +26,9 @@ cmake_minimum_required(VERSION 3.12.4)
 SET(GCC_COVERAGE_COMPILE_FLAGS "-DLV_CONF_INCLUDE_SIMPLE")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
-project(sdl_ecu_display)
+project(win_ecu_display)
+#target executables will be placed in build/
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 include_directories(inc inc/rs-232 src)
 
