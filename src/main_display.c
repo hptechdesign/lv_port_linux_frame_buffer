@@ -138,13 +138,16 @@ int nBytes=0;
     while(1) {
         lv_timer_handler();
         usleep(5000);
-       nBytes=serial_read();
-       if (nBytes)
-       {
-           memcpy(serialBuf, serial_getBuffer(), (size_t)nBytes);
-           printf(serialBuf);
-           nBytes=0;
-       }
+        // poll for serial data
+        sensor_getData();
+        // update widgets
+        
+        bar_waterTempASetValue(sensor_getTemperatureA());
+        bar_waterTempBSetValue(sensor_getTemperatureB());
+        meter_airPressureSetValue(sensor_getManifoldPressure());
+        meter_fuelPressureSetValue(sensor_getFuelPressure());
+        meter_oilPressureSetValue(sensor_getOilPressure());
+        meter_rpmSetValue(sensor_getCrankRpm());
     }
 #endif  /// RPI_ECU_DISPLAY
 

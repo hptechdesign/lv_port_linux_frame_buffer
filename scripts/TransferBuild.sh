@@ -12,7 +12,7 @@ SFTP_PWD=$RPI_PASSWORD
 echo "Issuing pkill gdbserver command to tidy up Raspberry PI..."
 sshpass -p $RPI_PASSWORD ssh $RPI_USER@$RPI_IP 'pkill gdbserver'
 echo "Transferring rpi_ecu_display to Raspberry PI..."
-lftp sftp://$SFTP_USER:$SFTP_PWD@$SFTP_SERVER  -e "put ./build/src/rpi_ecu_display; bye"
+lftp sftp://$SFTP_USER:$SFTP_PWD@$SFTP_SERVER  -e "put ./build/rpi_ecu_display; bye"
 echo "Starting GdbServer on Raspberry PI"
 sshpass -p $RPI_PASSWORD ssh $RPI_USER@$RPI_IP 'chmod 771 ./rpi_ecu_display'
 sshpass -p $RPI_PASSWORD ssh $RPI_USER@$RPI_IP 'gdbserver localhost:9999 ./rpi_ecu_display'

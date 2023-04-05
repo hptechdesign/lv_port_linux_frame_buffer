@@ -8,6 +8,8 @@
 #include "ecu_configs.h"
 #include "serial.h"
 #include "sensor.h"
+#include <stdlib.h>
+
 
 /* Private macros and typedefs */
 typedef unsigned char BYTE;
@@ -41,9 +43,6 @@ static BYTE tx_control_data[CONTROL_FRAME_SIZE];
 
 
 static serial_modes_t serial_mode;
-static BOOL tx_in_progress=FALSE;
-static BOOL rx_in_progress=FALSE;
-
 
 
 /**
@@ -53,13 +52,12 @@ static BOOL rx_in_progress=FALSE;
 
 void serial_sendSensorPacket(void)
 {
-  if(serial_mode==mode_stream_data && tx_in_progress== FALSE)
+  if(serial_mode==mode_stream_data)
   {
     serial_encapsulateSensorData();
-    tx_in_progress==TRUE;
     // check this is actually polled tx - I've assumed it is
     RS232_SendBuf(port, &tx_sensor_data[0], SENSOR_FRAME_SIZE);
-    tx_in_progress==FALSE;
+
 
   }
 }
@@ -72,7 +70,7 @@ void serial_sendSensorPacket(void)
 
 void serial_encapsulateSensorData(void)
 {
-  if(tx_in_progress== FALSE)
+  if(1) //consider checking if tx is in progress, e.g. if using interrupt driven tx
   {
     tx_sensor_data[crank_rpm_delimit] = 'S';
     tx_sensor_data[crank_rpm_x1000] = (BYTE) (sensor_getCrankRpm()/1000);
@@ -237,7 +235,11 @@ int serial_init(void)
 {
   // user selects serial port
   serial_mode = mode_select_port;
-  serial_selectPort();
+  #if WIN_ECU_DISPLAY
+    serial_selectPort();
+  #else
+    port=0;
+  #endif
   // open the selected port
   if(RS232_OpenComport(port, bdrate, mode, 0))
   {
@@ -257,6 +259,8 @@ int serial_init(void)
 
   // user selects serial mode
   int userInput = 0;
+  
+  #if(0)
   printf("Select test mode - 1=ASCII, 2=ECU_Data: ");
   while (scanf("%d", &userInput) != 1) 
   {
@@ -281,6 +285,10 @@ int serial_init(void)
     Please enter a value [1 or 2].", userInput);
     printf(msg);
   }
+  #else
+    serial_mode = mode_stream_data;
+    printf("\nRunning in sensor sensor mode.");
+  #endif
   return(serial_mode);
 }
 
