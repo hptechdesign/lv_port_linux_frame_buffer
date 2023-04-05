@@ -11,7 +11,7 @@
 #include "sensor.h"
 #include "serial.h"
 
-
+#define SPOOF_MAX_STEP_PERCENT 2
 #define SPOOF_CRANK_RPM_MEDIAN 2100
 #define SPOOF_MANIFOLD_PRESSURE_MEDIAN 1000
 #define SPOOF_TEMPERATURE_A_MEDIAN 98
@@ -38,48 +38,67 @@ static sensor_data_t sensor_data =
 };
 
 /* Private function prototypes */
-void sensor_generateData(void);
+
+// ecu_display functions
 void sensor_getData(void);
+
+// spoofer functions
+int sensor_spoofNext(int current, int target, int maxPercentDiff);
+void sensor_generateData(void);
 
 /* Global variables */
 
 /* Private functions */
 
+int sensor_spoofNext(int current, int target, int maxPercentDiff)
+{
+	int r=0;
+	// limit the range of random next values
+	r=rand() % target/(100/maxPercentDiff);
+	// get the next sensor value
+	current > target ? (current -= r) : (current += r);
+	return current;
+}
+
 // this function is used in the spoofer
 void sensor_generateData(void)
 {
-	int r=0; 
-	int temp=0;
 
-	temp=sensor_getCrankRpm();
-	r = rand() % (SPOOF_CRANK_RPM_MEDIAN/20);
-	temp>SPOOF_CRANK_RPM_MEDIAN ? (temp-=r):(temp+=r);
-	sensor_setCrankRpm(temp);
+	sensor_setCrankRpm(
+		sensor_spoofNext(
+			sensor_getCrankRpm(), 
+			SPOOF_CRANK_RPM_MEDIAN, 
+			SPOOF_MAX_STEP_PERCENT));
 
-	temp=sensor_getManifoldPressure();
-	r = rand() % (SPOOF_MANIFOLD_PRESSURE_MEDIAN/20);
-	temp>SPOOF_MANIFOLD_PRESSURE_MEDIAN ? (temp-=r):(temp+=r);
-	sensor_setManifoldPressure(temp);
+	sensor_setManifoldPressure(
+		sensor_spoofNext(
+			sensor_getManifoldPressure(), 
+			SPOOF_MANIFOLD_PRESSURE_MEDIAN, 
+			SPOOF_MAX_STEP_PERCENT));
 
-	temp=sensor_getTemperatureA();
-	r = rand() % (SPOOF_TEMPERATURE_A_MEDIAN/20);
-	temp>SPOOF_TEMPERATURE_A_MEDIAN ? (temp-=r):(temp+=r);
-	sensor_setTemperatureA(temp);
+	sensor_setTemperatureA(
+		sensor_spoofNext(
+			sensor_getTemperatureA(), 
+			SPOOF_TEMPERATURE_A_MEDIAN, 
+			SPOOF_MAX_STEP_PERCENT));
 
-	sensor_getTemperatureB();
-	r = rand() % (SPOOF_TEMPERATURE_B_MEDIAN/20);
-	temp>SPOOF_TEMPERATURE_B_MEDIAN ? (temp-=r):(temp+=r);
-	sensor_setTemperatureB(temp);
+	sensor_setTemperatureB(
+		sensor_spoofNext(
+			sensor_getTemperatureB(), 
+			SPOOF_TEMPERATURE_B_MEDIAN, 
+			SPOOF_MAX_STEP_PERCENT));
 
-	sensor_getOilPressure();
-	r = rand() % (SPOOF_OIL_PRESSURE_MEDIAN/20);
-	temp>SPOOF_OIL_PRESSURE_MEDIAN ? (temp-=r):(temp+=r);
-	sensor_setOilPressure(temp);
+	sensor_setOilPressure(
+		sensor_spoofNext(
+			sensor_getOilPressure(), 
+			SPOOF_OIL_PRESSURE_MEDIAN, 
+			SPOOF_MAX_STEP_PERCENT));
 
-	sensor_getFuelPressure();
-	r = rand() % (SPOOF_FUEL_PRESSURE_MEDIAN/20);
-	temp>SPOOF_FUEL_PRESSURE_MEDIAN ? (temp-=r):(temp+=r);
-	sensor_setFuelPressure(temp);
+	sensor_setFuelPressure(
+		sensor_spoofNext(
+			sensor_getFuelPressure(), 
+			SPOOF_FUEL_PRESSURE_MEDIAN, 
+			SPOOF_MAX_STEP_PERCENT));
 }
 
 // this function is used in rpi_ecu_display
