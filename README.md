@@ -44,8 +44,8 @@ Using this information you should be able to modify the rpi_ecu_display project'
 
 ### For Windows:
   - Open the top-level ```CMakeLists.txt``` file and uncomment the line
-    ```"project(win_ecu_display)"```. 
-  - Make sure that ```"project(rpi_ecu_display)``` is commented out.
+    ```set(platform "win")```. 
+  - Make sure that ```set(platform "rpi")``` is commented out.
   - Choose "Build" from the control panel at the bottom of VScode.
 
 The following executables will be placed in ```{workspace_dir}/build```:
@@ -56,8 +56,8 @@ The following executables will be placed in ```{workspace_dir}/build```:
 
 ### For RPI
   - Open the top-level ```CMakeLists.txt``` file and uncomment the line
-    ```"project(rpi_ecu_display)"```. 
-  - Make sure that ```"project(win_ecu_display)``` is commented out.
+    ```set(platform "rpi")```. 
+  - Make sure that ```set(platform "win")``` is commented out.
   - Choose "Build" from the control panel at the bottom of VScode.
 
 The ecu_sensor_spoofer will not be built. Only the rpi_ecu_display executable is built, and placed in  ```{workspace_dir}/build```.

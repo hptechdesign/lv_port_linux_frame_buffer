@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.12.4)
 
 # Project options (select only one):
-project(win_ecu_display)   #= create build/win_ecu_display and build/ecu_sensor_spoofer executables
-#project(rpi_ecu_display)  #=create build/rpi_ecu_display executable
+#set(platform "win") #= create build/win_ecu_display and build/ecu_sensor_spoofer executables
+set(platform "rpi")  #= create build/rpi_ecu_display executable
 
-if(${PROJECT_NAME} STREQUAL "rpi_ecu_display")
+if(${platform} STREQUAL "rpi")
 	set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
 	#must convert windows environment variables to cmake internal format
@@ -26,8 +26,11 @@ if(${PROJECT_NAME} STREQUAL "rpi_ecu_display")
 	set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 	add_compile_definitions(RPI_ECU_DISPLAY=1)
+	project(rpi_ecu_display)
 else()
+	# windows platform selected
 	add_compile_definitions(WIN_ECU_DISPLAY=1)
+	project(win_ecu_display)   
 endif()
 
 
