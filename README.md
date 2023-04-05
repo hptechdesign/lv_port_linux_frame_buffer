@@ -1,6 +1,7 @@
 # ECU Display running on RPi
 
-LVGL configured to work with /dev/fb0 on Linux. Also compiles as a windows simulator - see
+LVGL configured to work with /dev/fb0 on Linux. Also compiles as a windows simulator,
+which generates an additional target "ecu_sensor_spoofer" - see
 instructions at bottom.
 
 When cloning this repository, also make sure to download submodules (`git submodule update --init --recursive`) otherwise you will be missing key components.
@@ -63,6 +64,24 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
   ```
   - Also comment out the ```${SDL2_LIBRARIES}``` line in the  ```target_link_libraries``` command
+
+
+### Executables
+
+When built for Windows, the following executables will be placed in ```{workspace_dir}/build```:
+ - win_ecu_display
+   - The Windows display simulator, with a COM port serial interface
+ - ecu_sensor_spoofer
+   - A signal spooder which emulates the engine sensors and transmits the data via a COM port
+
+When built for RPI, the ecu_sensor_spoofer will not be built. Only the rpi_ecu_display executable is built, and placed in  ```{workspace_dir}/build```.
+
+### Debug
+Several debug launchers have been created.
+
+On Windows, you can launch win_ecu_display, ecu_sensor_spoofer, or a compound launcher which launches both.
+
+On RPI, you first need to ctrl-shft-'B', which transfers the binary to the PI, then you can launch the rpi_ecu_display debugger which will attach to the remote GDB session on the RPI.
 
 ----
 
