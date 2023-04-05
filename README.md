@@ -43,38 +43,24 @@ Using this information you should be able to modify the rpi_ecu_display project'
 ## Building
 
 ### For Windows:
-  - Delete the top-level ```CMakeLists.txt``` file
-  - Copy and rename ```CMakeListsSDL.txt``` to ```CMakeLists.txt```
-  - Open ```ecu_configs.h```, set ```SDL_ECU_DISPLAY=1``` and ```RPI_ECU_DISPLAY=0```
-  - Open src/CMakeLists.txt and uncomment the following lines:
-  ```
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-  ```
-  - Also uncomment the ```${SDL2_LIBRARIES}``` line in the  ```target_link_libraries``` command
+  - Open the top-level ```CMakeLists.txt``` file and uncomment the line
+    ```"project(win_ecu_display)"```. 
+  - Make sure that ```"project(rpi_ecu_display)``` is commented out.
+  - Choose "Build" from the control panel at the bottom of VScode.
 
-
-### For RPI
-  - Delete the top-level ```CMakeLists.txt``` file
-  - Copy and rename ```CMakeListsRPI.txt``` to ```CMakeLists.txt```
-  - Open ```ecu_configs.h```, set ```RPI_ECU_DISPLAY=1``` and ```SDL_ECU_DISPLAY=0```
-    - Open src/CMakeLists.txt and comment out the following lines:
-  ```
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-  ```
-  - Also comment out the ```${SDL2_LIBRARIES}``` line in the  ```target_link_libraries``` command
-
-
-### Executables
-
-When built for Windows, the following executables will be placed in ```{workspace_dir}/build```:
+The following executables will be placed in ```{workspace_dir}/build```:
  - win_ecu_display
    - The Windows display simulator, with a COM port serial interface
  - ecu_sensor_spoofer
    - A signal spooder which emulates the engine sensors and transmits the data via a COM port
 
-When built for RPI, the ecu_sensor_spoofer will not be built. Only the rpi_ecu_display executable is built, and placed in  ```{workspace_dir}/build```.
+### For RPI
+  - Open the top-level ```CMakeLists.txt``` file and uncomment the line
+    ```"project(rpi_ecu_display)"```. 
+  - Make sure that ```"project(win_ecu_display)``` is commented out.
+  - Choose "Build" from the control panel at the bottom of VScode.
+
+The ecu_sensor_spoofer will not be built. Only the rpi_ecu_display executable is built, and placed in  ```{workspace_dir}/build```.
 
 ### Debug
 Several debug launchers have been created.
@@ -85,7 +71,7 @@ On RPI, you first need to ctrl-shft-'B', which transfers the binary to the PI, t
 
 ----
 
-Derived from the LVGL Framebuffer Demo project and its related sub modules:
+The base display project was derived from the LVGL Framebuffer Demo project and its related sub modules:
 [https://github.com/lvgl/lv_port_linux_frame_buffer.git].
 
 See this blog post for a step by step tutorial for deriving from scratch:

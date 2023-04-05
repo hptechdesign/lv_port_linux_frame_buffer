@@ -1,32 +1,39 @@
 cmake_minimum_required(VERSION 3.12.4)
-#set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
-#must convert windows environment variables to cmake internal format
-#file(TO_CMAKE_PATH $ENV{RPIDEV_LOC} TOOLCHAIN_LOC)
+# Project options (select only one):
+project(win_ecu_display)   #= create build/win_ecu_display and build/ecu_sensor_spoofer executables
+#project(rpi_ecu_display)  #=create build/rpi_ecu_display executable
 
-#set(CMAKE_SYSTEM_NAME Linux)
-#set(CMAKE_SYSTEM_PROCESSOR arm)
+if(${PROJECT_NAME} STREQUAL "rpi_ecu_display")
+	set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
-#set(CMAKE_SYSROOT ${TOOLCHAIN_LOC}/arm-linux-gnueabihf/sysroot)
-#set(CMAKE_STAGING_PREFIX /home/rpi_ecu_display/stage)
+	#must convert windows environment variables to cmake internal format
+	file(TO_CMAKE_PATH $ENV{RPIDEV_LOC} TOOLCHAIN_LOC)
 
-#set(tools ${TOOLCHAIN_LOC})
-#set(CMAKE_C_COMPILER ${tools}/bin/arm-linux-gnueabihf-gcc.exe)
-#set(CMAKE_CXX_COMPILER ${tools}/bin/arm-linux-gnueabihf-g++.exe)
+	set(CMAKE_SYSTEM_NAME Linux)
+	set(CMAKE_SYSTEM_PROCESSOR arm)
 
-#set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-#set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-#set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-#set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+	set(CMAKE_SYSROOT ${TOOLCHAIN_LOC}/arm-linux-gnueabihf/sysroot)
+	set(CMAKE_STAGING_PREFIX /home/rpi_ecu_display/stage)
 
+	set(tools ${TOOLCHAIN_LOC})
+	set(CMAKE_C_COMPILER ${tools}/bin/arm-linux-gnueabihf-gcc.exe)
+	set(CMAKE_CXX_COMPILER ${tools}/bin/arm-linux-gnueabihf-g++.exe)
 
-#add_compile_definitions(RPI_ECU_DISPLAY=1)
+	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+	set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+	add_compile_definitions(RPI_ECU_DISPLAY=1)
+else()
+	add_compile_definitions(WIN_ECU_DISPLAY=1)
+endif()
 
 
 SET(GCC_COVERAGE_COMPILE_FLAGS "-DLV_CONF_INCLUDE_SIMPLE")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
-project(win_ecu_display)
 #target executables will be placed in build/
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
@@ -37,6 +44,12 @@ add_subdirectory(inc/lv_drivers)
 add_subdirectory(inc/rs-232)
 add_subdirectory(src)
 
-# this next command generates a compile_command.json file for intellisense to recognise
-# the add_compile_definitions used. Note: used by Ninja and Makefile generators, check others
-#target_compile_definitions(rpi_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
+if(${PROJECT_NAME} STREQUAL "rpi_ecu_display")
+	# this next command generates a compile_command.json file for intellisense to recognise
+	# the add_compile_definitions used. Note: used by Ninja and Makefile generators, check others
+	target_compile_definitions(rpi_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
+else()
+	target_compile_definitions(win_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
+endif()
+
+

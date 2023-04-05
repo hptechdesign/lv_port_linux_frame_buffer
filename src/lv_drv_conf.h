@@ -1,6 +1,6 @@
 #include "ecu_configs.h"
 
-#if SDL_ECU_DISPLAY
+#if WIN_ECU_DISPLAY
 #include "lv_drv_conf_sdl.h"
 #else
 #include "lv_drv_conf_pi.h"

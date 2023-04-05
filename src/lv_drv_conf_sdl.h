@@ -12,7 +12,7 @@
 /* clang-format off */
 #include "ecu_configs.h"
 
-#if SDL_ECU_DISPLAY
+#if WIN_ECU_DISPLAY
 
 
 #ifndef LV_DRV_CONF_H

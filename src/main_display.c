@@ -27,14 +27,14 @@
 #include <unistd.h>
 
 // Windows drivers
-#elif SDL_ECU_DISPLAY 
+#elif WIN_ECU_DISPLAY 
 // include the lvgl sdl header
 #include "sdl/sdl.h"
 // also include the SDL2 header
 #include "sdl.h"
 #include "Windows.h"
 #include "unistd.h"
-#endif  //RPI_ECU_DISPLAY elif SDL_ECU_DISPLAY
+#endif  //RPI_ECU_DISPLAY elif WIN_ECU_DISPLAY
 
 
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 {
     /*LittlevGL init*/
     lv_init();
-#if SDL_ECU_DISPLAY
+#if WIN_ECU_DISPLAY
     sdl_init();
 #endif
 
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     }
 
     // set up the display driver
-#if SDL_ECU_DISPLAY
+#if WIN_ECU_DISPLAY
 #define BUFFER_SIZE (SDL_HOR_RES * SDL_VER_RES)
     /*A static or global variable to store the buffers*/
     static lv_disp_draw_buf_t disp_buf;
@@ -149,7 +149,7 @@ int nBytes=0;
 #endif  /// RPI_ECU_DISPLAY
 
 
-#if SDL_ECU_DISPLAY
+#if WIN_ECU_DISPLAY
     for (;;) {
         // Run LVGL engine
         lv_tick_inc(1);
@@ -166,7 +166,7 @@ int nBytes=0;
         meter_oilPressureSetValue(sensor_getOilPressure());
         meter_rpmSetValue(sensor_getCrankRpm());
     }
-#endif // SDL_ECU_DISPLAY
+#endif // WIN_ECU_DISPLAY
 
     return 0;
 }

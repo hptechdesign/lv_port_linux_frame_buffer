@@ -1,13 +1,12 @@
 
-#define RPI_ECU_DISPLAY 0
-#define SDL_ECU_DISPLAY 1
+
 
 #define ANIMATION_ENABLED 0
 
 /****************** Drivers  *************/
-#if ((RPI_ECU_DISPLAY + SDL_ECU_DISPLAY) != 1)
+#if ((RPI_ECU_DISPLAY + WIN_ECU_DISPLAY) != 1)
 #error More than one build configuration is defined
-#endif // ((RPI_ECU_DISPLAY + SDL_ECU_DISPLAY) != 1)
+#endif // ((RPI_ECU_DISPLAY + WIN_ECU_DISPLAY) != 1)
 
 
 /****************** Application *************/

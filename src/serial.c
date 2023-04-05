@@ -247,7 +247,7 @@ int serial_init(void)
   }
 
   // serial splash message
-  #if SDL_ECU_DISPLAY || ECU_SENSOR_SPOOFER
+  #if WIN_ECU_DISPLAY || ECU_SENSOR_SPOOFER
   snprintf(msg, sizeof(msg), "\n\rOpened port: COM%d\n", (port+1));
   #elif RPI_ECU_DISPLAY
   snprintf(msg, sizeof(msg), "Opened port: %3d\n", port);
