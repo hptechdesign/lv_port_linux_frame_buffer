@@ -1,5 +1,6 @@
 {
-"files.associations": {
+    "clang-format.executable": "clang-format",
+    "files.associations": {
     "main.h": "c",
     "cg_debug.h": "c",
     "stdio.h": "c",
@@ -15,5 +16,6 @@
     "sdl.h": "c",
     "bar_watertemp.h": "c",
     "serial.h": "c"
+    
 }
 }

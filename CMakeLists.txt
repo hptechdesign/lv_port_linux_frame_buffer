@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.12.4)
 
 # Project options (select only one):
-#set(platform "win") #= create build/win_ecu_display and build/ecu_sensor_spoofer executables
-set(platform "rpi")  #= create build/rpi_ecu_display executable
+set(platform "win") #= create build/win_ecu_display and build/ecu_sensor_spoofer executables
+#set(platform "rpi")  #= create build/rpi_ecu_display executable
 
 if(${platform} STREQUAL "rpi")
 	set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
