@@ -104,7 +104,7 @@ void sensor_fillBufWithCurrentData(char * buf)
         Crank_rpm              = %4d\n \\
         Manifold_pressure_mbar = %4d\n \\
         Temperature_a_degC     = %4d\n \\
-        Temperature_b_degC     =  %4d\n \\
+        Temperature_b_degC     = %4d\n \\
         Oil_pressure_mbar      = %4d\n \\
         Fuel_pressure_bar      = %4d\n",
              sensor_data.crank_rpm, sensor_data.manifold_pressure_mbar, sensor_data.temperature_a_degC,
