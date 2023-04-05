@@ -10,6 +10,7 @@
 /* Includes */
 #include "sensor.h"
 #include "serial.h"
+#include <stdlib.h>
 
 #define SPOOF_MAX_STEP_PERCENT 2
 #define SPOOF_CRANK_RPM_MEDIAN 2100

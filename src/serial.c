@@ -8,7 +8,7 @@
 #include "ecu_configs.h"
 #include "serial.h"
 #include "sensor.h"
-#include <stdlib.h>
+
 
 
 /* Private macros and typedefs */
