@@ -1,5 +1,6 @@
 {
     "clang-format.executable": "clang-format",
+    "editor.formatOnSave": true,
     "files.associations": {
         "main.h": "c",
         "cg_debug.h": "c",
