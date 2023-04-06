@@ -124,7 +124,6 @@ void serial_getSensorData(sensor_data_t * rx_buffer)
     if(serial_mode == mode_stream_data) {
         int rx_bytes = 0, timeout = 0;
         BYTE byteBuf = '0';
-#warning introduced a while loop here which might lock up!! consider exceptions
         while(rx_bytes < (SENSOR_FRAME_SIZE - 1) && timeout < 0xFFFFF) {
             // order is important here, else we'd drop the second byte after identifying the first delimiter
             // First finish processing any part received buffers
