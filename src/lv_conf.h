@@ -1,8 +1,10 @@
 /**
  * @file lv_conf.h
- * Configuration file for v8.2.0
+ * @author Huw Price/LVGL
+ * @brief lvgl library definitions - Configuration file for v8.3.0
+ * @date 2023-04-06
+ *
  */
-
 /*
  * Copy this file as `lv_conf.h`
  * 1. simply next to the `lvgl` folder
@@ -18,7 +20,7 @@
 #define LV_CONF_H
 
 #include <stdint.h>
-
+#include "ecu_configs.h"
 /*=======================
    FUNCTION PROTOTYPES
  *=======================*/
@@ -91,7 +93,14 @@ extern uint32_t custom_tick_get(void);
 
 /*Use a custom tick source that tells the elapsed time in milliseconds.
  *It removes the need to manually update the tick with `lv_tick_inc()`)*/
+
+
+#if RPI_ECU_DISPLAY
 #define LV_TICK_CUSTOM 1
+#else
+#define LV_TICK_CUSTOM 0
+#endif
+
 #if LV_TICK_CUSTOM
     #define LV_TICK_CUSTOM_INCLUDE <stdint.h>         /*Header for the system time function*/
     #define LV_TICK_CUSTOM_SYS_TIME_EXPR (custom_tick_get())    /*Expression evaluating to current system time in ms*/
@@ -249,7 +258,7 @@ extern uint32_t custom_tick_get(void);
  *-----------*/
 
 /*1: Show CPU usage and FPS count*/
-#define LV_USE_PERF_MONITOR 0
+#define LV_USE_PERF_MONITOR 1
 #if LV_USE_PERF_MONITOR
     #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
 #endif
@@ -258,7 +267,7 @@ extern uint32_t custom_tick_get(void);
  * Requires LV_MEM_CUSTOM = 0*/
 #define LV_USE_MEM_MONITOR 0
 #if LV_USE_MEM_MONITOR
-    #define LV_USE_MEM_MONITOR_POS LV_ALIGN_BOTTOM_LEFT
+    #define LV_USE_MEM_MONITOR_POS LV_ALIGN_TOP_RIGHT
 #endif
 
 /*1: Draw random colored rectangles over the redrawn areas*/
@@ -333,11 +342,11 @@ extern uint32_t custom_tick_get(void);
  *https://fonts.google.com/specimen/Montserrat*/
 #define LV_FONT_MONTSERRAT_8  0
 #define LV_FONT_MONTSERRAT_10 0
-#define LV_FONT_MONTSERRAT_12 0
+#define LV_FONT_MONTSERRAT_12 1
 #define LV_FONT_MONTSERRAT_14 1
 #define LV_FONT_MONTSERRAT_16 0
-#define LV_FONT_MONTSERRAT_18 0
-#define LV_FONT_MONTSERRAT_20 0
+#define LV_FONT_MONTSERRAT_18 1
+#define LV_FONT_MONTSERRAT_20 1
 #define LV_FONT_MONTSERRAT_22 0
 #define LV_FONT_MONTSERRAT_24 0
 #define LV_FONT_MONTSERRAT_26 0
@@ -369,7 +378,7 @@ extern uint32_t custom_tick_get(void);
 #define LV_FONT_CUSTOM_DECLARE
 
 /*Always set a default font*/
-#define LV_FONT_DEFAULT &lv_font_montserrat_14
+#define LV_FONT_DEFAULT &lv_font_montserrat_20
 
 /*Enable handling large font and/or fonts with a lot of characters.
  *The limit depends on the font size, font face and bpp.
@@ -544,7 +553,7 @@ extern uint32_t custom_tick_get(void);
 #if LV_USE_THEME_DEFAULT
 
     /*0: Light mode; 1: Dark mode*/
-    #define LV_THEME_DEFAULT_DARK 0
+    #define LV_THEME_DEFAULT_DARK 1
 
     /*1: Enable grow on press*/
     #define LV_THEME_DEFAULT_GROW 1
@@ -557,7 +566,7 @@ extern uint32_t custom_tick_get(void);
 #define LV_USE_THEME_BASIC 1
 
 /*A theme designed for monochrome displays*/
-#define LV_USE_THEME_MONO 1
+#define LV_USE_THEME_MONO 0
 
 /*-----------
  * Layouts
@@ -668,14 +677,14 @@ extern uint32_t custom_tick_get(void);
 *==================*/
 
 /*Enable the examples to be built with the library*/
-#define LV_BUILD_EXAMPLES 1
+#define LV_BUILD_EXAMPLES 0
 
 /*===================
  * DEMO USAGE
  ====================*/
 
 /*Show some widget. It might be required to increase `LV_MEM_SIZE` */
-#define LV_USE_DEMO_WIDGETS        1
+#define LV_USE_DEMO_WIDGETS        0
 #if LV_USE_DEMO_WIDGETS
 #define LV_DEMO_WIDGETS_SLIDESHOW  0
 #endif

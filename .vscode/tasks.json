@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Transfer to RPI and Start GDB server",
+            "group": "build",
+            "command": "scripts/TransferBuild.sh",
+            "type": "shell",
+            "options": {
+                "shell":{
+                    "executable": "C:/msys64/msys2_shell.cmd",
+                    "args": [                
+                        "-defterm",
+                        "-here",
+                        "-no-start",
+                        "-mingw64"]
+                },
+            },
+            "args": [
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": []
+        },
+    ]
+}

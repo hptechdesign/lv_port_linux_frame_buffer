@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "name": "RPI-Win",
+            "includePath": [
+                "${workspaceRoot}/**",
+                "${workspaceRoot}/inc/**",
+                "${workspaceRoot}/inc/lvgl/**",
+                "${workspaceRoot}/inc/lv_drivers/**",
+                "${workspaceRoot}/inc/rs-232",
+                "${workspaceRoot}/src/widgets"
+
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\msys64\\mingw64\\bin\\c++.exe",
+            "compileCommands": "${workspaceRoot}/build/compile_commands.json",
+            "intelliSenseMode": "${default}",
+            "browse": {
+                "path": [
+                    "${workspaceRoot}",
+                    "${RPIDEV_LOC}/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceRoot}/.vscode/browsedb/browse.vc."
+            },
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}

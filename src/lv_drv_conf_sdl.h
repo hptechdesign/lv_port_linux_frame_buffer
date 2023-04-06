@@ -1,14 +1,23 @@
 /**
- * @file lv_drv_conf.h
- * Configuration file for v8.2.0
+ * @file lv_drv_conf_sdl.h
+ * @author Huw Price/LVGL
+ * @brief Redirected lvgl library call for SDL builds - Configuration file for v8.3.0
+ * @date 2023-04-06
+ *
+ *
  */
 
-/*
- * COPY THIS FILE AS lv_drv_conf.h
- */
+
+
+
+
+/// https://betterprogramming.pub/build-a-c-gui-application-with-lvgl-and-a-sdl2-as-the-backend-85a07ee94a9f
 
 /* clang-format off */
-#if 1 /*Set it to "1" to enable the content*/
+#include "ecu_configs.h"
+
+#if WIN_ECU_DISPLAY
+
 
 #ifndef LV_DRV_CONF_H
 #define LV_DRV_CONF_H
@@ -86,7 +95,7 @@
 
 /* SDL based drivers for display, mouse, mousewheel and keyboard*/
 #ifndef USE_SDL
-# define USE_SDL 0
+# define USE_SDL 1
 #endif
 
 /* Hardware accelerated SDL driver */
@@ -95,8 +104,8 @@
 #endif
 
 #if USE_SDL || USE_SDL_GPU
-#  define SDL_HOR_RES     480
-#  define SDL_VER_RES     320
+#  define SDL_HOR_RES     800
+#  define SDL_VER_RES     480
 
 /* Scale window by this factor (useful when simulating small screens) */
 #  define SDL_ZOOM        1
@@ -316,7 +325,7 @@
  *  Linux frame buffer device (/dev/fbx)
  *-----------------------------------------*/
 #ifndef USE_FBDEV
-#  define USE_FBDEV           1
+#  define USE_FBDEV           0
 #endif
 
 #if USE_FBDEV
@@ -439,7 +448,7 @@
  * Mouse or touchpad as evdev interface (for Linux based systems)
  *------------------------------------------------*/
 #ifndef USE_EVDEV
-#  define USE_EVDEV           1
+#  define USE_EVDEV           0
 #endif
 
 #ifndef USE_BSD_EVDEV
@@ -447,7 +456,7 @@
 #endif
 
 #if USE_EVDEV || USE_BSD_EVDEV
-#  define EVDEV_NAME   "/dev/input/event10"        /*You can use the "evtest" Linux tool to get the list of devices and test them*/
+#  define EVDEV_NAME   "/dev/input/event0"        /*You can use the "evtest" Linux tool to get the list of devices and test them*/
 #  define EVDEV_SWAP_AXES         0               /*Swap the x and y axes of the touchscreen*/
 
 #  define EVDEV_CALIBRATE         0               /*Scale and offset the touchscreen coordinates by using maximum and minimum values for each axis*/
