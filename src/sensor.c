@@ -3,8 +3,9 @@
  * @brief Store or serve sensor data.
  *
  * Sensor values can be spoofed using sensor_generateData().
- * Serial module uses the sensor_setXxx() commands to store the data in private structs.
- * Application software uses the sensor_getXxxx() commands to retrieve stored data.
+ * Serial module uses the sensor_setXxx() commands to store the data in private
+ * structs. Application software uses the sensor_getXxxx() commands to retrieve
+ * stored data.
  */
 
 /* Includes */
@@ -12,6 +13,7 @@
 #include "serial.h"
 #include <stdlib.h>
 
+/* Private macros */
 #define SPOOF_MAX_STEP_PERCENT 2
 #define SPOOF_CRANK_RPM_MEDIAN 2100
 #define SPOOF_MANIFOLD_PRESSURE_MEDIAN 1000
@@ -20,26 +22,28 @@
 #define SPOOF_OIL_PRESSURE_MEDIAN 2500
 #define SPOOF_FUEL_PRESSURE_MEDIAN 2200
 
-/* Private macros */
-static control_data_t control_data = {.fire_angle_deg = 0, .injector_duty_ms = 0, .peak_hold_ms = 0};
-static sensor_data_t sensor_data   = {.crank_rpm              = 0,
-                                      .manifold_pressure_mbar = 0,
-                                      .temperature_a_degC     = 0,
-                                      .temperature_b_degC     = 0,
-                                      .oil_pressure_mbar      = 0,
-                                      .fuel_pressure_bar      = 0};
-
 /* Private function prototypes */
 
 // ecu_display functions
 void sensor_getData(void);
 
-// spoofer functions
+// sensor_spoofer functions
 int sensor_spoofNext(int current, int target, int maxPercentDiff);
 void sensor_generateData(void);
 
 /* Global variables */
 
+/* Static variables */
+
+static control_data_t control_data = {
+    .fire_angle_deg = 0, .injector_duty_ms = 0, .peak_hold_ms = 0};
+static sensor_data_t sensor_data = {.crank_rpm              = 0,
+                                    .manifold_pressure_mbar = 0,
+                                    .temperature_a_degC     = 0,
+                                    .temperature_b_degC     = 0,
+                                    .oil_pressure_mbar      = 0,
+                                    .fuel_pressure_bar      = 0};
+static int payloadsSent          = 0;
 /* Private functions */
 
 /**
@@ -72,23 +76,28 @@ int sensor_spoofNext(int current, int target, int maxPercentDiff)
 void sensor_generateData(void)
 {
 
-    sensor_setCrankRpm(sensor_spoofNext(\
+    sensor_setCrankRpm(sensor_spoofNext(
         sensor_getCrankRpm(), SPOOF_CRANK_RPM_MEDIAN, SPOOF_MAX_STEP_PERCENT));
 
-    sensor_setManifoldPressure(sensor_spoofNext(\
-        sensor_getManifoldPressure(), SPOOF_MANIFOLD_PRESSURE_MEDIAN, SPOOF_MAX_STEP_PERCENT));
+    sensor_setManifoldPressure(sensor_spoofNext(sensor_getManifoldPressure(),
+                                                SPOOF_MANIFOLD_PRESSURE_MEDIAN,
+                                                SPOOF_MAX_STEP_PERCENT));
 
-    sensor_setTemperatureA(sensor_spoofNext(\
-        sensor_getTemperatureA(), SPOOF_TEMPERATURE_A_MEDIAN, SPOOF_MAX_STEP_PERCENT));
+    sensor_setTemperatureA(sensor_spoofNext(sensor_getTemperatureA(),
+                                            SPOOF_TEMPERATURE_A_MEDIAN,
+                                            SPOOF_MAX_STEP_PERCENT));
 
-    sensor_setTemperatureB(sensor_spoofNext(\
-        sensor_getTemperatureB(), SPOOF_TEMPERATURE_B_MEDIAN, SPOOF_MAX_STEP_PERCENT));
+    sensor_setTemperatureB(sensor_spoofNext(sensor_getTemperatureB(),
+                                            SPOOF_TEMPERATURE_B_MEDIAN,
+                                            SPOOF_MAX_STEP_PERCENT));
 
-    sensor_setOilPressure(sensor_spoofNext(\
-        sensor_getOilPressure(), SPOOF_OIL_PRESSURE_MEDIAN, SPOOF_MAX_STEP_PERCENT));
+    sensor_setOilPressure(sensor_spoofNext(sensor_getOilPressure(),
+                                           SPOOF_OIL_PRESSURE_MEDIAN,
+                                           SPOOF_MAX_STEP_PERCENT));
 
-    sensor_setFuelPressure(sensor_spoofNext(\
-        sensor_getFuelPressure(), SPOOF_FUEL_PRESSURE_MEDIAN, SPOOF_MAX_STEP_PERCENT));
+    sensor_setFuelPressure(sensor_spoofNext(sensor_getFuelPressure(),
+                                            SPOOF_FUEL_PRESSURE_MEDIAN,
+                                            SPOOF_MAX_STEP_PERCENT));
 }
 
 /**
@@ -100,15 +109,17 @@ void sensor_generateData(void)
  */
 void sensor_fillBufWithCurrentData(char * buf)
 {
-    snprintf(buf, 512, "Payload sent:\n\
+    snprintf(buf, 512, "Payload [%6d]:\n\
         Crank_rpm              = %4d\n\
         Manifold_pressure_mbar = %4d\n\
         Temperature_a_degC     = %4d\n\
         Temperature_b_degC     = %4d\n\
         Oil_pressure_mbar      = %4d\n\
         Fuel_pressure_bar      = %4d\n",
-             sensor_data.crank_rpm, sensor_data.manifold_pressure_mbar, sensor_data.temperature_a_degC,
-             sensor_data.temperature_b_degC, sensor_data.oil_pressure_mbar, sensor_data.fuel_pressure_bar);
+             payloadsSent, sensor_data.crank_rpm,
+             sensor_data.manifold_pressure_mbar, sensor_data.temperature_a_degC,
+             sensor_data.temperature_b_degC, sensor_data.oil_pressure_mbar,
+             sensor_data.fuel_pressure_bar);
 }
 
 /**
