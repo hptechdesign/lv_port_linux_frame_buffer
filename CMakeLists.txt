@@ -37,8 +37,8 @@ endif()
 SET(GCC_COVERAGE_COMPILE_FLAGS "-DLV_CONF_INCLUDE_SIMPLE")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
-#target executables will be placed in build/
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+#target executables will be placed in bin/
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 include_directories(inc inc/rs-232 src)
 

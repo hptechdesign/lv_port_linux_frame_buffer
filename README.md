@@ -48,7 +48,7 @@ Using this information you should be able to modify the rpi_ecu_display project'
   - Make sure that ```set(platform "rpi")``` is commented out.
   - Choose "Build" from the control panel at the bottom of VScode.
 
-The following executables will be placed in ```{workspace_dir}/build```:
+The following executables will be placed in ```{workspace_dir}/bin```:
  - win_ecu_display
    - The Windows display simulator, with a COM port serial interface
  - ecu_sensor_spoofer
@@ -60,7 +60,7 @@ The following executables will be placed in ```{workspace_dir}/build```:
   - Make sure that ```set(platform "win")``` is commented out.
   - Choose "Build" from the control panel at the bottom of VScode.
 
-The ecu_sensor_spoofer will not be built. Only the rpi_ecu_display executable is built, and placed in  ```{workspace_dir}/build```.
+The ecu_sensor_spoofer will not be built. Only the rpi_ecu_display executable is built, and placed in  ```{workspace_dir}/bin```.
 
 ### Debug
 Several debug launchers have been created.
