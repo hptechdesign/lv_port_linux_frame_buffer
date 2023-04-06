@@ -1,11 +1,16 @@
 /**
  * @file sensor.h
- * @brief Brief description of the header.
+ * @author Huw Price
+ * @brief
+ * Sensor values can be spoofed by calling sensor_generateData().
+ * Serial module uses the sensor_setXxx() commands to store the data in private
+ * structs.
+ * Application software uses the sensor_getXxxx() commands to retrieve
+ * stored data.
+ * @date 2023-04-06
  *
- * Sensor values can be spoofed using sensor_generateData(), or read from the serial rx
- * buffer using sensor_getData().
- * Serial module uses the sensor_setXxx() commands to store the data in private structs.
- * Application software uses the sensor_getXxxx() commands to retrieve stored data.
+ * @copyright Copyright (c) 2023
+ *
  */
 
 #ifndef _SENSOR_H
@@ -13,7 +18,8 @@
 
 #include <stdint.h>
 
-/* Typedefs - Consider hiding these implementation details, export a pointer instead */
+/* Typedefs - Consider hiding these implementation details, export a pointer
+ * instead */
 typedef struct control_data
 {
     uint16_t fire_angle_deg;

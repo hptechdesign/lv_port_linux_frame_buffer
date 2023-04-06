@@ -1,10 +1,9 @@
 /**
- * @file lv_drv_conf.h
- * Configuration file for v8.2.0
- */
-
-/*
- * COPY THIS FILE AS lv_drv_conf.h
+ * @file lv_drv_conf_rpi.h
+ * @author Huw Price/LVGL
+ * @brief Redirected lvgl library call for RPi builds - Configuration file for v8.3.0
+ * @date 2023-04-06
+ *
  */
 
 /* clang-format off */

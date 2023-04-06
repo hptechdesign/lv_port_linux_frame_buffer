@@ -1,4 +1,12 @@
-
+/**
+ * @file main_spoofer.c
+ * @author Huw Price
+ * @brief ECU sensor spoofer, generates fake sensor signals and txs over UART
+ * @date 2023-04-06
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 // **************  Common includes
 

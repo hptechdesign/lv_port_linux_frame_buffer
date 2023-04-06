@@ -1,3 +1,13 @@
+/**
+ * @file init_win_env.h
+ * @author Huw Price
+ * @brief Windows-specific headers and init functions
+ * @date 2023-04-06
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #ifndef INIT_WIN_H
 #define INIT_WIN_H
 
@@ -15,24 +25,22 @@
 
 #include "resource.h"
 
-
 #if _MSC_VER >= 1200
- // Disable compilation warnings.
+// Disable compilation warnings.
 #pragma warning(push)
 // nonstandard extension used : bit field types other than int
-#pragma warning(disable:4214)
+#pragma warning(disable : 4214)
 // 'conversion' conversion from 'type1' to 'type2', possible loss of data
-#pragma warning(disable:4244)
+#pragma warning(disable : 4244)
 #endif
 
 #include "lvgl/lvgl.h"
-//#include "lvgl/examples/lv_examples.h"
-//#include "lvgl/demos/lv_demos.h"
+// #include "lvgl/examples/lv_examples.h"
+// #include "lvgl/demos/lv_demos.h"
 #include "lv_drivers/win32drv/win32drv.h"
 
-
 bool single_display_mode_initialization(void);
-unsigned int __stdcall lv_win32_window_thread_entrypoint(void* raw_parameter);
+unsigned int __stdcall lv_win32_window_thread_entrypoint(void * raw_parameter);
 
-#endif  //WIN_ECU_DISPLAY
-#endif //#ifndef INIT_WIN_H
+#endif // WIN_ECU_DISPLAY
+#endif // #ifndef INIT_WIN_H

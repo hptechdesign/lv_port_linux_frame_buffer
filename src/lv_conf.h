@@ -1,8 +1,10 @@
 /**
  * @file lv_conf.h
- * Configuration file for v8.2.0
+ * @author Huw Price/LVGL
+ * @brief lvgl library definitions - Configuration file for v8.3.0
+ * @date 2023-04-06
+ *
  */
-
 /*
  * Copy this file as `lv_conf.h`
  * 1. simply next to the `lvgl` folder

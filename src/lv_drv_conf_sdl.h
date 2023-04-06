@@ -1,11 +1,15 @@
 /**
- * @file lv_drv_conf.h
- * Configuration file for v8.3.0
+ * @file lv_drv_conf_sdl.h
+ * @author Huw Price/LVGL
+ * @brief Redirected lvgl library call for SDL builds - Configuration file for v8.3.0
+ * @date 2023-04-06
+ *
+ *
  */
 
-/*
- * COPY THIS FILE AS lv_drv_conf.h
- */
+
+
+
 
 /// https://betterprogramming.pub/build-a-c-gui-application-with-lvgl-and-a-sdl2-as-the-backend-85a07ee94a9f
 

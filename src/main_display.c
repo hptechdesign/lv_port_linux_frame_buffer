@@ -1,4 +1,12 @@
-
+/**
+ * @file main_display.c
+ * @author Huw Price
+ * @brief ECU display for RPI and Windows simulator
+ * @date 2023-04-06
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 // **************  Common includes
 #include "lvgl/lvgl.h"
@@ -61,19 +69,28 @@ int main(int argc, char * argv[])
     static lv_disp_draw_buf_t disp_buf;
     /*Static or global buffer(s). The second buffer is optional*/
     static lv_color_t * buf_1[BUFFER_SIZE] = {0};
-    /*Initialize `disp_buf` with the buffer(s). With only one buffer use NULL instead buf_2 */
+    /*Initialize `disp_buf` with the buffer(s). With only one buffer use NULL
+     * instead buf_2 */
     lv_disp_draw_buf_init(&disp_buf, buf_1, NULL, BUFFER_SIZE);
-    static lv_disp_drv_t disp_drv;                       /*A variable to hold the drivers. Must be static or global.*/
-    lv_disp_drv_init(&disp_drv);                         /*Basic initialization*/
-    disp_drv.draw_buf = &disp_buf;                       /*Set an initialized buffer*/
-    disp_drv.flush_cb = sdl_display_flush;               /*Set a flush callback to draw to the display*/
-    disp_drv.hor_res  = SDL_HOR_RES;                     /*Set the horizontal resolution in pixels*/
-    disp_drv.ver_res  = SDL_VER_RES;                     /*Set the vertical resolution in pixels*/
-    lv_disp_t * disp  = lv_disp_drv_register(&disp_drv); /*Register the driver and save the created display objects*/
-    lv_theme_default_init(disp, lv_color_make(0x77, 0x44, 0xBB), lv_color_make(0x14, 0x14, 0x3C), 1, lv_font_default());
+    /*A variable to hold the drivers. Must be static or global.*/
+    static lv_disp_drv_t disp_drv;
+    /*Basic initialization*/
+    lv_disp_drv_init(&disp_drv);
+    /*Set an initialized buffer*/
+    disp_drv.draw_buf = &disp_buf;
+    /*Set a flush callback to draw to the display*/
+    disp_drv.flush_cb = sdl_display_flush;
+    disp_drv.hor_res  = SDL_HOR_RES; /*Set the horizontal resolution in pixels*/
+    disp_drv.ver_res  = SDL_VER_RES; /*Set the vertical resolution in pixels*/
+    /*Register the driver and save the created display objects*/
+    lv_disp_t * disp = lv_disp_drv_register(&disp_drv);
+    lv_theme_default_init(disp, lv_color_make(0x77, 0x44, 0xBB),
+                          lv_color_make(0x14, 0x14, 0x3C), 1,
+                          lv_font_default());
 
     static lv_indev_drv_t indev_drv;
-    lv_indev_drv_init(&indev_drv); /*Basic initialization*/
+    /*Basic initialization*/
+    lv_indev_drv_init(&indev_drv);
     indev_drv.type    = LV_INDEV_TYPE_POINTER;
     indev_drv.read_cb = sdl_mouse_read;
     lv_indev_drv_register(&indev_drv);
@@ -104,15 +121,18 @@ int main(int argc, char * argv[])
     lv_indev_drv_init(&indev_drv_1); /*Basic initialization*/
     indev_drv_1.type = LV_INDEV_TYPE_POINTER;
 
-    /*This function will be called periodically (by the library) to get the mouse position and state*/
+    /*This function will be called periodically (by the library) to get the
+     * mouse position and state*/
     indev_drv_1.read_cb      = evdev_read;
     lv_indev_t * mouse_indev = lv_indev_drv_register(&indev_drv_1);
 
     /*Set a cursor for the mouse*/
     LV_IMG_DECLARE(mouse_cursor_icon)
-    lv_obj_t * cursor_obj = lv_img_create(lv_scr_act()); /*Create an image object for the cursor */
-    lv_img_set_src(cursor_obj, &mouse_cursor_icon);      /*Set the image source*/
-    lv_indev_set_cursor(mouse_indev, cursor_obj);        /*Connect the image  object to the driver*/
+    lv_obj_t * cursor_obj =
+        lv_img_create(lv_scr_act()); /*Create an image object for the cursor */
+    lv_img_set_src(cursor_obj, &mouse_cursor_icon); /*Set the image source*/
+    lv_indev_set_cursor(mouse_indev,
+                        cursor_obj); /*Connect the image  object to the driver*/
 #endif // SDL(elif)RPI_ECU_DISPLAY
 
     /*Draw Widgets*/
