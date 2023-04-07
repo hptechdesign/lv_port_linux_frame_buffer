@@ -4,6 +4,12 @@ cmake_minimum_required(VERSION 3.12.4)
 set(platform "win") #= create build/win_ecu_display and build/ecu_sensor_spoofer executables
 #set(platform "rpi")  #= create build/rpi_ecu_display executable
 
+# Store version into variable
+execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --always
+    OUTPUT_VARIABLE GIT_REPO_VERSION)
+
+message("Building " ${GIT_REPO_VERSION})
+
 if(${platform} STREQUAL "rpi")
 	set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
