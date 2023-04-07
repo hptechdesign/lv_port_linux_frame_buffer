@@ -43,6 +43,9 @@ Using this information you should be able to modify the rpi_ecu_display project'
 ## Building
 
 ### For Windows:
+
+Make sure that you delete the /build folder if you've previously used it to build for RPi.
+Any binaries generated previously will remain in the /bin folder.
   - Open the top-level ```CMakeLists.txt``` file and uncomment the line
     ```set(platform "win")```. 
   - Make sure that ```set(platform "rpi")``` is commented out.
@@ -55,6 +58,8 @@ The following executables will be placed in ```{workspace_dir}/bin```:
    - A signal spooder which emulates the engine sensors and transmits the data via a COM port
 
 ### For RPI
+Make sure that you delete the /build folder if you've previously used it to build for Windows.
+Any binaries generated previously will remain in the /bin folder.
   - Open the top-level ```CMakeLists.txt``` file and uncomment the line
     ```set(platform "rpi")```. 
   - Make sure that ```set(platform "win")``` is commented out.
@@ -69,6 +74,19 @@ On Windows, you can launch win_ecu_display, ecu_sensor_spoofer, or a compound la
 
 On RPI, you first need to ctrl-shft-'B', which transfers the binary to the PI, then you can launch the rpi_ecu_display debugger which will attach to the remote GDB session on the RPI.
 
+### Running the binaries
+  - win_ecu_display
+    - The Windows simulator, asks for a COM port to receive serial data. If serial data is provided in the correct format (see src/serial module) then the meters and gauges will be updated at approx 30 Hz.
+  - ecu_sensor_spoofer
+    - Windows sensor emulator, asks for COM port to send serial data. Fake sensor readings
+      are generated and will ramp up to an approx 75% maximum reading then hovering to
+      within 3% using a random number generator. This can be used to interface either with
+      the win_ecu_display, using two USB-RS232 serial converters and a null modem, or it
+      can interface directly with the dev/ttyS0 serial port pin on the RPi.
+  - rpi_ecu_display
+    - The ECU is designed to run on an RPi with a 800x600 touchscreen interface. Serial
+      data can be provided from the ecu_sensor_spoofer interfaced with the dev/ttyS0
+      serial port - tested on a RPi 3B running Raspbian but may also work on others.
 ----
 
 The base display project was derived from the LVGL Framebuffer Demo project and its related sub modules:
