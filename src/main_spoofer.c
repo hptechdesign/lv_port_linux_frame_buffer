@@ -28,8 +28,8 @@ int main(int argc, char * argv[])
 {
 
     printf("\nBegin main loop");
-    // user selects serial port
-    serial_modes_t mode = serial_init();
+    // user selects serial port - mode is always spoof
+    serial_modes_t mode = serial_init(mode_internal_spoof);
     if((mode != mode_ascii) && (mode != mode_stream_data)) {
         printf("Failed to initialise serial port");
         return 3;
