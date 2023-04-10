@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
         // keep window open
         char prompt = 0;
         printf("\nPress a key and press enter to continue \n");
-        scanf_s("%d", &prompt);
+        scanf("%d", &prompt);
         // exit program
         return mode_port_error;
     }
