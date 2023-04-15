@@ -60,3 +60,5 @@ dkms.conf
 /bin
 
 /.cache/
+/doc/html
+/doc/latex
