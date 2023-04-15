@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12.4)
 
-if(${PROJECT_NAME} STREQUAL "win_ecu_display")
+if(${TARGET_PLATFORM} STREQUAL "win_ecu_display")
 	# MSYS2 package:
 	# If not installed, first open MSYS2 terminal and install:
 	# pacman -S mingw-w64-x86_64-SDL2
@@ -29,9 +29,9 @@ add_executable(${PROJECT_NAME}
 
 add_subdirectory(widgets)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE 	${ecu_libs})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ecu_libs})
 
-if(${PROJECT_NAME} STREQUAL "win_ecu_display")
+if(${TARGET_PLATFORM} STREQUAL "win")
 	# create ecu_sensor_spoofer if compiling for windows
 	add_executable(ecu_sensor_spoofer 
 								main_spoofer.c 
@@ -41,3 +41,7 @@ if(${PROJECT_NAME} STREQUAL "win_ecu_display")
 endif()
 						
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED 17)
+
+add_custom_command(TARGET rpi_ecu_display 
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:rpi_ecu_display> "${CMAKE_SOURCE_DIR}/bin/rpi_ecu_display_${TARGET_SUFFIX}")
