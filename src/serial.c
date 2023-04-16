@@ -251,7 +251,8 @@ int serial_init(serial_modes_t program_mode)
     // only need to ask user for mode if in display program - not
     // ecu_sensor_spoofer:
     if(program_mode != mode_internal_spoof) {
-        printf("\n\nSelect test mode - 1=External serial ECU data, 2=Generate "
+        printf("\n\nSelect test mode.\n 1 = External serial ECU data\n 2 = "
+               "Generate "
                "internal spoofed ECU_Data\n: ");
         while(scanf("%d", &userInput) != 1) {
             printf("Please enter a value [1 or 2].\n");

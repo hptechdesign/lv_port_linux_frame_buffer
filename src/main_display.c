@@ -46,6 +46,7 @@
 
 /* Private functions */
 void display_updateWidgets(void);
+void printVersionDetails(void);
 
 static unsigned char serialBuf[4096];
 
@@ -53,7 +54,7 @@ static unsigned char serialBuf[4096];
 
 int main(int argc, char * argv[])
 {
-    printf("\nBegin main loop");
+    printVersionDetails();
 
     // user selects serial port
     serial_modes_t mode = serial_init(mode_select_port);
@@ -228,3 +229,17 @@ uint32_t custom_tick_get(void)
     return time_ms;
 }
 #endif // RPI_ECU_DISPLAY
+
+/**
+ * @brief Print version details
+ *
+ */
+void printVersionDetails(void)
+{
+    char tempBuf[512];
+    snprintf(tempBuf, sizeof(tempBuf),
+             "\n********************************\n* Windows ECU Display "
+             "%s.%s-%s%s\n********************************\n",
+             MAJ_VER, MIN_VER, COMMITS_PAST, CLEAN_FLAG);
+    printf("%s", tempBuf);
+}
