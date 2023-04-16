@@ -20,6 +20,8 @@
 #include "Windows.h"
 #include <unistd.h>
 
+void printVersionDetails(void);
+
 static char printBuf[4096];
 
 // ************** MAIN
@@ -27,13 +29,7 @@ static char printBuf[4096];
 int main(int argc, char * argv[])
 {
 
-    snprintf(printBuf, sizeof(printBuf),
-             "\n******************************************\n* Windows ECU "
-             "Sensor Spoofer "
-             "%s.%s-%s%s\n******************************************\n",
-             MAJ_VER, MIN_VER, COMMITS_PAST, CLEAN_FLAG);
-    printf("%s", printBuf);
-
+    printVersionDetails();
     // user selects serial port - mode is always spoof
     serial_modes_t mode = serial_init(mode_internal_spoof);
     if((mode != mode_ascii) && (mode != mode_stream_data)) {
@@ -52,4 +48,19 @@ int main(int argc, char * argv[])
     }
 
     return 0;
+}
+
+/**
+ * @brief Print version details
+ *
+ */
+void printVersionDetails(void)
+{
+    char tempBuf[512];
+    snprintf(tempBuf, sizeof(tempBuf),
+             "\n******************************************\n* Windows ECU "
+             "Sensor Spoofer "
+             "%s.%s-%s%s\n******************************************\n",
+             MAJ_VER, MIN_VER, COMMITS_PAST, CLEAN_FLAG);
+    printf("%s", tempBuf);
 }
