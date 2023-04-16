@@ -1,3 +1,4 @@
+# rpi_ecu_display 
 cmake_minimum_required(VERSION 3.12.4)
 
 # Project options (select only one):
@@ -23,11 +24,12 @@ if (LISTLEN GREATER_EQUAL 3)
 	list(GET MAJ_MIN_LIST 1 MIN_VER)
 	list(GET VERSION_LIST 1 COMMITS_PAST)
 	list(GET VERSION_LIST 3 CLEAN)
+	string(REPLACE "v" "" MAJ_VER ${MAJ_VER})
 	message("MAJ_VER:" ${MAJ_VER} "\nMIN_VER:" ${MIN_VER} "\nCOMMITS_PAST:" ${COMMITS_PAST} "\nCLEAN:" ${CLEAN})
 	if (${CLEAN} MATCHES "^dirty")
 		set(CLEAN_FLAG "+")
 	endif()
-	set(TARGET_SUFFIX ${MAJ_VER}.${MIN_VER}-${COMMITS_PAST}${CLEAN_FLAG})
+	set(TARGET_SUFFIX v${MAJ_VER}.${MIN_VER}-${COMMITS_PAST}${CLEAN_FLAG})
 else()
 	#fallback in case git is not installed
 	set(TARGET_SUFFIX "noVerDetails")
@@ -75,9 +77,9 @@ SET(GCC_COVERAGE_COMPILE_FLAGS
 
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
-add_compile_definitions(MAJ_VER="${MAJ_VER}")
-add_compile_definitions(MIN_VER="${MIN_VER}")
-add_compile_definitions(COMMITS_PAST="${COMMITS_PAST}")
+add_compile_definitions(MAJ_VER=${MAJ_VER})
+add_compile_definitions(MIN_VER=${MIN_VER})
+add_compile_definitions(COMMITS_PAST=${COMMITS_PAST})
 add_compile_definitions(CLEAN_FLAG="${CLEAN_FLAG}")
 
 

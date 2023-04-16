@@ -239,7 +239,7 @@ void printVersionDetails(void)
     char tempBuf[512];
     snprintf(tempBuf, sizeof(tempBuf),
              "\n********************************\n* Windows ECU Display "
-             "%s.%s-%s%s\n********************************\n",
+             "%d.%d-%d%s\n********************************\n",
              MAJ_VER, MIN_VER, COMMITS_PAST, CLEAN_FLAG);
     printf("%s", tempBuf);
 }
