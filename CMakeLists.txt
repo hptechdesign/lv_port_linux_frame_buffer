@@ -20,15 +20,18 @@ if (LISTLEN GREATER_EQUAL 3)
 	list(GET VERSION_LIST 0 MAJ_MIN)
 	string(REPLACE "." ";"  MAJ_MIN_LIST ${MAJ_MIN})
 	list(GET MAJ_MIN_LIST 0 MAJ_VER)
+	string(REPLACE "v" "" MAJ_VER ${MAJ_VER})
 	list(GET MAJ_MIN_LIST 1 MIN_VER)
 	list(GET VERSION_LIST 1 COMMITS_PAST)
-	list(GET VERSION_LIST 3 CLEAN)
-	string(REPLACE "v" "" MAJ_VER ${MAJ_VER})
-	message("MAJ_VER:" ${MAJ_VER} "\nMIN_VER:" ${MIN_VER} 
-			"\nCOMMITS_PAST:" ${COMMITS_PAST} "\nCLEAN:" ${CLEAN})
-	if (${CLEAN} MATCHES "^dirty")
+	if(LISTLEN EQUAL 4)
+		#list(GET VERSION_LIST 3 CLEAN) #always dirty if 4 list elements
 		set(CLEAN_FLAG "+")
+	else()
+		set(CLEAN_FLAG "")
 	endif()
+	
+	message("MAJ_VER:" ${MAJ_VER} "\nMIN_VER:" ${MIN_VER} 
+			"\nCOMMITS_PAST:" ${COMMITS_PAST} "\nCLEAN:" ${CLEAN_FLAG})
 	set(TARGET_SUFFIX v${MAJ_VER}.${MIN_VER}-${COMMITS_PAST}${CLEAN_FLAG})
 else()
 	# Fallback in case git is not installed
