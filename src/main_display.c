@@ -48,12 +48,18 @@
 void display_updateWidgets(void);
 
 static unsigned char serialBuf[4096];
+static unsigned char printBuf[512];
+;
 
 // ************** MAIN
 
 int main(int argc, char * argv[])
 {
-    printf("\nBegin main loop");
+    snprintf(printBuf, sizeof(printBuf),
+             "\n********************************\n* Windows ECU Display "
+             "%s.%s-%s%s\n********************************\n",
+             MAJ_VER, MIN_VER, COMMITS_PAST, CLEAN_FLAG);
+    printf("%s", printBuf);
 
     // user selects serial port
     serial_modes_t mode = serial_init(mode_select_port);

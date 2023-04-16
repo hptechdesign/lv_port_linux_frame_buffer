@@ -20,14 +20,20 @@
 #include "Windows.h"
 #include <unistd.h>
 
-static unsigned char printBuf[4096];
+static char printBuf[4096];
 
 // ************** MAIN
 
 int main(int argc, char * argv[])
 {
 
-    printf("\nBegin main loop");
+    snprintf(printBuf, sizeof(printBuf),
+             "\n******************************************\n* Windows ECU "
+             "Sensor Spoofer "
+             "%s.%s-%s%s\n******************************************\n",
+             MAJ_VER, MIN_VER, COMMITS_PAST, CLEAN_FLAG);
+    printf("%s", printBuf);
+
     // user selects serial port - mode is always spoof
     serial_modes_t mode = serial_init(mode_internal_spoof);
     if((mode != mode_ascii) && (mode != mode_stream_data)) {
@@ -39,7 +45,7 @@ int main(int argc, char * argv[])
 
         serial_sendSensorPacket();
         sensor_fillBufWithCurrentData(printBuf);
-        printf(printBuf);
+        printf("%s", printBuf);
         // note this is static for now - the data doesn't change
         sensor_generateData();
         usleep(100000);
