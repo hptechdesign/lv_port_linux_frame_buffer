@@ -1,5 +1,7 @@
 # Fetch the git version details and create variables which can be used within the apps
-execute_process(COMMAND git describe --tags --dirty --always  OUTPUT_VARIABLE GIT_VERSION)
+execute_process(COMMAND 
+				git describe --long --tags --dirty --always  
+				OUTPUT_VARIABLE GIT_VERSION)
 message("Project version number is: " ${GIT_VERSION})
 # Do some clunky manipulations - expected format, if git is installed, is:
 # 'v1.0-7-g133d586-dirty', 
