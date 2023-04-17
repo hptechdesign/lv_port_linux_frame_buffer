@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12.4)
+cmake_minimum_required(VERSION 3.22)
 
 if(${TARGET_PLATFORM} STREQUAL "win")
 	# MSYS2 package:
