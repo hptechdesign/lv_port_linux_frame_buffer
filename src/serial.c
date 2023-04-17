@@ -241,57 +241,65 @@ void serial_getSensorData(sensor_data_t * rx_buffer)
  * @return int stream mode
  */
 
-int serial_init(void)
+int serial_init(serial_modes_t program_mode)
 {
-    // user selects serial port
-    serial_mode = mode_select_port;
-#if WIN_ECU_DISPLAY
-    serial_selectPort();
-#else
-    port = 0;
-#endif
-    // open the selected port
-    if(RS232_OpenComport(port, bdrate, mode, 0)) {
-        printf("Can not open comport\n");
-
-        return (0);
-    }
-
-// serial splash message
-#if WIN_ECU_DISPLAY || ECU_SENSOR_SPOOFER
-    snprintf(msg, sizeof(msg), "\n\rOpened port: COM%d\n", (port + 1));
-#elif RPI_ECU_DISPLAY
-    snprintf(msg, sizeof(msg), "Opened port: %3d\n", port);
-#endif
-    printf(msg);
-    serial_puts(msg);
-
     // user selects serial mode
     int userInput = 0;
+    serial_mode   = mode_select_port;
 
-#if(0)
-    printf("Select test mode - 1=ASCII, 2=ECU_Data: ");
-    while(scanf("%d", &userInput) != 1) {
-        printf("Please enter a value [1 or 2].\n");
-    };
-    if(userInput > 0 && userInput < 3) {
-        if(userInput == 1) {
-            serial_mode = mode_ascii;
-            printf("\nRunning in ASCII mode");
+#if WIN_ECU_DISPLAY
+    // only need to ask user for mode if in display program - not
+    // ecu_sensor_spoofer:
+    if(program_mode != mode_internal_spoof) {
+        printf("\n\nSelect test mode.\n 1 = External serial ECU data\n 2 = "
+               "Generate "
+               "internal spoofed ECU_Data\n: ");
+        while(scanf("%d", &userInput) != 1) {
+            printf("Please enter a value [1 or 2].\n");
+        };
+        if(userInput > 0 && userInput < 3) {
+            if(userInput == 1) {
+                serial_mode = mode_stream_data;
+                printf("\nRunning in external sensor mode (serial).");
+            } else {
+                serial_mode = mode_internal_spoof;
+                printf("\nRunning in internal spoof mode.");
+            }
         } else {
-            serial_mode = mode_stream_data;
-            printf("\nRunning in sensor sensor mode.");
+            snprintf(msg, sizeof(msg), "\n\rSelection [%3d] is not valid.\
+                Please enter a value [1 or 2].",
+                     userInput);
+            printf(msg);
         }
     } else {
-        snprintf(msg, sizeof(msg), "\n\rSelection [%3d] is not valid.\
-    Please enter a value [1 or 2].",
-                 userInput);
-        printf(msg);
+        serial_mode = mode_stream_data;
     }
 #else
     serial_mode = mode_stream_data;
     printf("\nRunning in sensor sensor mode.");
 #endif
+
+    if(serial_mode == mode_stream_data) {
+#if WIN_ECU_DISPLAY
+        serial_selectPort();
+#else
+        port = 0;
+#endif
+        // open the selected port
+        if(RS232_OpenComport(port, bdrate, mode, 0)) {
+            return (mode_port_error);
+        }
+
+// serial splash message
+#if WIN_ECU_DISPLAY || ECU_SENSOR_SPOOFER
+        snprintf(msg, sizeof(msg), "\n\rOpened port: COM%d\n", (port + 1));
+#elif RPI_ECU_DISPLAY
+        snprintf(msg, sizeof(msg), "Opened port: %3d\n", port);
+#endif
+        printf(msg);
+        serial_puts(msg);
+    }
+
     return (serial_mode);
 }
 
@@ -307,7 +315,7 @@ void serial_selectPort(void)
     while(port == -1) {
         // select serial port
 
-        printf("\nEnter a COM port number: ");
+        printf("\n\nEnter a COM port number: ");
         while(scanf("%d", &userInput) != 1) {
             printf("Please enter a value [1 to 99].\n");
         };

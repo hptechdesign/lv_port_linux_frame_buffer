@@ -1,13 +1,20 @@
+# rpi_ecu_display - for RPi (X-compile) and Windows (Simulator)
 cmake_minimum_required(VERSION 3.12.4)
 
 # Project options (select only one):
-set(platform "win") #= create build/win_ecu_display and build/ecu_sensor_spoofer executables
-#set(platform "rpi")  #= create build/rpi_ecu_display executable
+set(TARGET_PLATFORM "win") #= create win_ecu_display and ecu_sensor_spoofer executables
+# Set(TARGET_PLATFORM "rpi")  #= create rpi_ecu_display executable
 
-if(${platform} STREQUAL "rpi")
+# Get the project version details, in the format 
+# (int) MAJ_VER, (int) MIN_VER, (int) COMMITS_PAST, (str) CLEAN_FLAG
+include(version.cmake)
+message("Target suffix is: " ${TARGET_SUFFIX})
+
+# Set up platform-specific options
+if(${TARGET_PLATFORM} STREQUAL "rpi")
 	set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
-	#must convert windows environment variables to cmake internal format
+	# Must convert windows environment variables to cmake internal format
 	file(TO_CMAKE_PATH $ENV{RPIDEV_LOC} TOOLCHAIN_LOC)
 
 	set(CMAKE_SYSTEM_NAME Linux)
@@ -26,33 +33,44 @@ if(${platform} STREQUAL "rpi")
 	set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 	add_compile_definitions(RPI_ECU_DISPLAY=1)
+
+	set(${TARGET_NAME} rpi_ecu_display_${TARGET_SUFFIX})
+
 	project(rpi_ecu_display)
 else()
-	# windows platform selected
+	# Windows platform selected
 	add_compile_definitions(WIN_ECU_DISPLAY=1)
+
+	set(${TARGET_NAME} win_ecu_display_${TARGET_SUFFIX})
+
 	project(win_ecu_display)   
 endif()
+# Common flags
+add_compile_definitions(MAJ_VER=${MAJ_VER}
+						MIN_VER=${MIN_VER}
+						COMMITS_PAST=${COMMITS_PAST}
+						CLEAN_FLAG="${CLEAN_FLAG}")
 
+set(GCC_COVERAGE_COMPILE_FLAGS 
+	"-DLV_CONF_INCLUDE_SIMPLE"
+	)
 
-SET(GCC_COVERAGE_COMPILE_FLAGS "-DLV_CONF_INCLUDE_SIMPLE")
-SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
 #target executables will be placed in bin/
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-include_directories(inc inc/rs-232 src)
+include_directories(inc 
+					inc/rs-232 
+					src)
 
 add_subdirectory(inc/lvgl)
 add_subdirectory(inc/lv_drivers)
 add_subdirectory(inc/rs-232)
 add_subdirectory(src)
 
-if(${PROJECT_NAME} STREQUAL "rpi_ecu_display")
-	# this next command generates a compile_command.json file for intellisense to recognise
-	# the add_compile_definitions used. Note: used by Ninja and Makefile generators, check others
-	target_compile_definitions(rpi_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
-else()
-	target_compile_definitions(win_ecu_display PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
-endif()
+target_compile_definitions(${PROJECT_NAME} PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
+
+
 
 
