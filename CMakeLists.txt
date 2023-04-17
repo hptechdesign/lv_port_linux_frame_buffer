@@ -1,9 +1,13 @@
 # rpi_ecu_display - for RPi (X-compile) and Windows (Simulator)
 cmake_minimum_required(VERSION 3.12.4)
 
-# Project options (select only one):
-set(TARGET_PLATFORM "win") #= create win_ecu_display and ecu_sensor_spoofer executables
-# Set(TARGET_PLATFORM "rpi")  #= create rpi_ecu_display executable
+include(set_platform.cmake)
+if((NOT TARGET_PLATFORM STREQUAL win) AND (NOT TARGET_PATFORM STREQUAL rpi))
+	message("Invalid build option. Please ensure there is a 'set_platform.cmake' file located in the top level project directory, which sets TARGET_PLATFORM as either 'win' or 'rpi'(and not both) - e.g. set(TARGET_PLATFORM \"win\")")
+		message("Default build is win")
+		set(TARGET_PLATFORM "win")
+endif()
+
 
 # Get the project version details, in the format 
 # (int) MAJ_VER, (int) MIN_VER, (int) COMMITS_PAST, (str) CLEAN_FLAG

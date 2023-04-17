@@ -59,6 +59,11 @@ dkms.conf
 /build/
 /bin
 
+# doc directories
 /.cache/
 /doc/html
 /doc/latex
+
+# platorm setting
+set_platform.cmake
+

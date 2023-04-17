@@ -5,10 +5,12 @@ if(${TARGET_PLATFORM} STREQUAL "win")
 		message("Build is clean")
 		# Set release folder name
 		set(DEST ${CMAKE_SOURCE_DIR}/bin/x86_64_w64_v${MAJ_VER}.${MIN_VER})
+		# Copy main project binary
 		add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> 
 				   ${DEST}/${PROJECT_NAME}_${TARGET_SUFFIX}.exe)
+		# Copy ecu_sensor_spoofer binary
 		add_custom_command(TARGET ecu_sensor_spoofer 
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ecu_sensor_spoofer> 
@@ -25,6 +27,7 @@ else() # RPi_ecu_build
 		message("Build is clean")
 		# Set release folder name
 		set(DEST ${CMAKE_SOURCE_DIR}/bin/armv8_rpi_raspbian_v${MAJ_VER}.${MIN_VER})
+		# Copy main project binary
 		add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> 
