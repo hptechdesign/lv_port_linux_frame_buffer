@@ -3,11 +3,14 @@ if(${TARGET_PLATFORM} STREQUAL "win")
 	message("Checking clean flag status")
 	if(NOT CLEAN_FLAG STREQUAL "+")
 		message("Build is clean")
+		# Set release folder name
+		set(DEST ${CMAKE_SOURCE_DIR}/bin/x86_64_win64_v${MAJ_VER}.${MIN_VER})
 	else()
 		message(WARNING "Build is dirty")
+		# Set release folder name
+		set(DEST ${CMAKE_SOURCE_DIR}/bin/x86_64_win64_v${MAJ_VER}.${MIN_VER}_DIRTY)
 	endif()
-	# Set release folder name
-	set(DEST ${CMAKE_SOURCE_DIR}/bin/x86_64_win64_v${MAJ_VER}.${MIN_VER})
+	
 	# Copy main project binary to release folder
 	add_custom_command(TARGET ${PROJECT_NAME} 
                POST_BUILD
