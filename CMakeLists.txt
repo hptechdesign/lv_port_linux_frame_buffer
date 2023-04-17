@@ -2,7 +2,8 @@
 cmake_minimum_required(VERSION 3.12.4)
 
 include(set_platform.cmake)
-if((NOT TARGET_PLATFORM STREQUAL win) AND (NOT TARGET_PATFORM STREQUAL rpi))
+
+if((NOT ${TARGET_PLATFORM} STREQUAL win) AND (NOT ${TARGET_PATFORM} STREQUAL rpi))
 	message("Invalid build option. Please ensure there is a 'set_platform.cmake' file located in the top level project directory, which sets TARGET_PLATFORM as either 'win' or 'rpi'(and not both) - e.g. set(TARGET_PLATFORM \"win\")")
 		message("Default build is win")
 		set(TARGET_PLATFORM "win")
