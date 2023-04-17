@@ -1,7 +1,7 @@
 # If a clean commit, copy the binaries and stamp with version details
 if(${TARGET_PLATFORM} STREQUAL "win")
 	message("Checking clean flag status")
-	if(NOT ${CLEAN_FLAG} STREQUAL "+")
+	if(NOT CLEAN_FLAG STREQUAL "+")
 		message("Build is clean")
 		add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD
@@ -17,7 +17,7 @@ if(${TARGET_PLATFORM} STREQUAL "win")
 
 else() # RPi_ecu_build
 	message("Checking clean flag status")
-	if(NOT ${CLEAN_FLAG} STREQUAL "+")
+	if(NOT CLEAN_FLAG STREQUAL "+")
 	message("Build is clean")
 		add_custom_command(TARGET ${PROJECT_NAME} 
                    POST_BUILD
