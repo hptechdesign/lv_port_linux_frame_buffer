@@ -14,7 +14,7 @@ if(${TARGET_PLATFORM} STREQUAL "win")
 						widgets
 	)
 
-else() # rpi_ecu_build
+else() # RPi_ecu_build
 	set(ecu_libs 		lvgl 
 						lvgl::drivers 
 						rs232
@@ -34,26 +34,15 @@ add_subdirectory(widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${ecu_libs})
 
 if(${TARGET_PLATFORM} STREQUAL "win")
-	# create ecu_sensor_spoofer if compiling for windows
+	# Create ecu_sensor_spoofer if compiling for windows
 	add_executable(ecu_sensor_spoofer 
 								main_spoofer.c 
 								serial.c
 								sensor.c)					
 	target_link_libraries(ecu_sensor_spoofer PRIVATE rs232)
-
-	add_custom_command(TARGET ${PROJECT_NAME} 
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> ${CMAKE_SOURCE_DIR}/bin/${PROJECT_NAME}_${TARGET_SUFFIX}.exe)
-	add_custom_command(TARGET ecu_sensor_spoofer 
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ecu_sensor_spoofer> ${CMAKE_SOURCE_DIR}/bin/ecu_sensor_spoofer_${TARGET_SUFFIX}.exe)
-else() # rpi_ecu_build
-#copy the binaries and stamp with version details
-add_custom_command(TARGET ${PROJECT_NAME} 
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> "${CMAKE_SOURCE_DIR}/bin/${PROJECT_NAME}_${TARGET_SUFFIX}")
-
-
 endif()
+
+# If a clean commit, then release binaries will be copied to a bin/release_xxx folder
+include(copy_release_bins.cmake)
 						
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED 17)

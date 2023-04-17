@@ -5,43 +5,9 @@ cmake_minimum_required(VERSION 3.12.4)
 set(TARGET_PLATFORM "win") #= create win_ecu_display and ecu_sensor_spoofer executables
 # Set(TARGET_PLATFORM "rpi")  #= create rpi_ecu_display executable
 
-# This section fetches the git version details and creates variables which can be used
-# within the apps
-execute_process(COMMAND git describe --tags --dirty --always  OUTPUT_VARIABLE GIT_VERSION)
-message("Project version number is: " ${GIT_VERSION})
-# Do some clunky manipulations - expected format, if git is installed, is:
-# 'v1.0-7-g133d586-dirty', 
-# where 'dirty' is only found when source files have been modified since the previous
-# commit
-# Generate lists from string
-string(REPLACE "-" ";" VERSION_LIST ${GIT_VERSION})
-list(LENGTH VERSION_LIST LISTLEN)
-if (LISTLEN GREATER_EQUAL 3)
-	list(GET VERSION_LIST 0 MAJ_MIN)
-	string(REPLACE "." ";"  MAJ_MIN_LIST ${MAJ_MIN})
-	list(GET MAJ_MIN_LIST 0 MAJ_VER)
-	string(REPLACE "v" "" MAJ_VER ${MAJ_VER})
-	list(GET MAJ_MIN_LIST 1 MIN_VER)
-	list(GET VERSION_LIST 1 COMMITS_PAST)
-	if(LISTLEN EQUAL 4)
-		#list(GET VERSION_LIST 3 CLEAN) #always dirty if 4 list elements
-		set(CLEAN_FLAG "+")
-	else()
-		set(CLEAN_FLAG "")
-	endif()
-	
-	message("MAJ_VER:" ${MAJ_VER} "\nMIN_VER:" ${MIN_VER} 
-			"\nCOMMITS_PAST:" ${COMMITS_PAST} "\nCLEAN:" ${CLEAN_FLAG})
-	set(TARGET_SUFFIX v${MAJ_VER}.${MIN_VER}-${COMMITS_PAST}${CLEAN_FLAG})
-else()
-	# Fallback in case git is not installed
-	set(TARGET_SUFFIX "noVerDetails")
-	set(MAJ_VER 0)
-	set(MIN_VER 0)
-	set(COMMITS_PAST 0)
-	set(CLEAN_FLAG "+")
-endif()
-
+# Get the project version details, in the format 
+# (int) MAJ_VER, (int) MIN_VER, (int) COMMITS_PAST, (str) CLEAN_FLAG
+include(version.cmake)
 message("Target suffix is: " ${TARGET_SUFFIX})
 
 # Set up platform-specific options
