@@ -13,8 +13,8 @@ if(${TARGET_PLATFORM} STREQUAL "win")
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ecu_sensor_spoofer> 
 				   ${DEST}/ecu_sensor_spoofer_${TARGET_SUFFIX}.exe)
-		message("Release binaries will be copied to "  
-				${DEST})
+		message("Release binaries will be copied to " ${DEST})
+				
 	else()
 		 message("Build is not clean")
 	endif()
@@ -29,8 +29,8 @@ else() # RPi_ecu_build
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> 
 				   ${DEST}/${PROJECT_NAME}_${TARGET_SUFFIX})
-		message("Release binaries will be copied to " 
-				${DEST})
+		message("Release binaries will be copied to " ${DEST})
+				
 	else()
 	message("Build is not clean")
 	endif()
