@@ -1,13 +1,17 @@
+# copy_release_bins.cmake
+#
+# Create release folder and binaries from git repo version details
+
+# Warn if repository is not clean
 message("Checking clean flag status")
 if(NOT CLEAN_FLAG STREQUAL "+")
 	message("Build is clean")
-	# Set release folder name
-	set(DEST ${CMAKE_SOURCE_DIR}/bin/x86_64_win64_v${MAJ_VER}.${MIN_VER}-${COMMITS_PAST})
 else()
 	message(WARNING "Build is dirty")
-	# Set release folder name
-	set(DEST ${CMAKE_SOURCE_DIR}/bin/x86_64_win64_v${MAJ_VER}.${MIN_VER}-${COMMITS_PAST}+)
 endif()
+
+# Set release folder name
+set(DEST ${CMAKE_SOURCE_DIR}/bin/ecu_display-${PLATFORM_SUFFIX}_${TARGET_SUFFIX})
 
 # Copy the binaries and stamp with version details
 if(${TARGET_PLATFORM} STREQUAL "win")
@@ -31,11 +35,8 @@ if(${TARGET_PLATFORM} STREQUAL "win")
 			   ${DEST}/ecu_sensor_spoofer_${TARGET_SUFFIX}.exe)
 	message("Release binaries will be copied to " ${DEST})
 
-
 else() # RPi_ecu_build
 
-	# Set release folder name
-	set(DEST ${CMAKE_SOURCE_DIR}/bin/armv8_rpi_raspbian_v${MAJ_VER}.${MIN_VER})
 	# Copy main project binary to release folder
 	add_custom_command(TARGET ${PROJECT_NAME} 
                POST_BUILD

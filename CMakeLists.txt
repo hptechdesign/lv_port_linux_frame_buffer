@@ -1,22 +1,31 @@
-# rpi_ecu_display - for RPi (X-compile) and Windows (Simulator)
+# CMakeLists.txt - top level
+#
+# Creates targets:
+# 	rpi_ecu_display - for RPi (X-compile)
+# 	win_ecu_display - for Windows (simulator)
+# 	ecu_sensor_spoofer - for Windows (simulator)
+
 cmake_minimum_required(VERSION 3.22)
 
+# This file must be present and is not included in the repository.
+# It must contain either set(TARGET_PLATFORM "win"), or set(TARGET_PLATFORM "rpi")
 include(set_platform.cmake)
-
+# Check that TARGET_PLATFORM has been set
 if((NOT ${TARGET_PLATFORM} STREQUAL win) AND (NOT ${TARGET_PATFORM} STREQUAL rpi))
 	message("Invalid build option. Please ensure there is a 'set_platform.cmake' file located in the top level project directory, which sets TARGET_PLATFORM as either 'win' or 'rpi'(and not both) - e.g. set(TARGET_PLATFORM \"win\")")
 		message("Default build is win")
 		set(TARGET_PLATFORM "win")
 endif()
 
-
-# Get the project version details, in the format 
+# version.cmake gets the project version details, in the format 
 # (int) MAJ_VER, (int) MIN_VER, (int) COMMITS_PAST, (str) CLEAN_FLAG
+# (str) TARGET_SUFFIX is also provided
 include(version.cmake)
 message("Target suffix is: " ${TARGET_SUFFIX})
 
 # Set up platform-specific options
 if(${TARGET_PLATFORM} STREQUAL "rpi")
+	# RPi environment settings
 	set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
 	# Must convert windows environment variables to cmake internal format
@@ -38,19 +47,24 @@ if(${TARGET_PLATFORM} STREQUAL "rpi")
 	set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 	add_compile_definitions(RPI_ECU_DISPLAY=1)
-
+	# PLATFORM_SUFFIX is used to name the binary release folders
+	set(PLATFORM_SUFFIX armv8_rpi_raspbian_v)
+	# Set the main ECU display executable taret name
 	set(${TARGET_NAME} rpi_ecu_display_${TARGET_SUFFIX})
-
+	# Set the project name
 	project(rpi_ecu_display)
 else()
 	# Windows platform selected
 	add_compile_definitions(WIN_ECU_DISPLAY=1)
-
+	# PLATFORM_SUFFIX is used to name the binary release folders
+	set(PLATFORM_SUFFIX x86_64_win64)
+	# Set the main ECU display executable taret name
 	set(${TARGET_NAME} win_ecu_display_${TARGET_SUFFIX})
-
+	# Set the project name
 	project(win_ecu_display)   
 endif()
-# Common flags
+
+# Common compiler flags
 add_compile_definitions(MAJ_VER=${MAJ_VER}
 						MIN_VER=${MIN_VER}
 						COMMITS_PAST=${COMMITS_PAST}
@@ -68,7 +82,6 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 include_directories(inc 
 					inc/rs-232 
 					src)
-
 add_subdirectory(inc/lvgl)
 add_subdirectory(inc/lv_drivers)
 add_subdirectory(inc/rs-232)
