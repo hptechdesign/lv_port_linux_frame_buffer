@@ -6,21 +6,38 @@
 # 	ecu_sensor_spoofer - for Windows (simulator)
 
 cmake_minimum_required(VERSION 3.22)
+#include utitilty functions
+include(utils.cmake)
 
-# This file must be present and is not included in the repository.
-# It must contain either set(TARGET_PLATFORM "win"), or set(TARGET_PLATFORM "rpi")
-include(set_platform.cmake)
-# Check that TARGET_PLATFORM has been set
-if((NOT ${TARGET_PLATFORM} STREQUAL win) AND (NOT ${TARGET_PATFORM} STREQUAL rpi))
-	message("Invalid build option. Please ensure there is a 'set_platform.cmake' file located in the top level project directory, which sets TARGET_PLATFORM as either 'win' or 'rpi'(and not both) - e.g. set(TARGET_PLATFORM \"win\")")
-		message("Default build is win")
-		set(TARGET_PLATFORM "win")
+# 'set_platform.cmake' contains a command to select 'win' or 'rpi' build.
+# If it does not exist, it will be created - it is not kept under version control.
+if(EXISTS "${CMAKE_SOURCE_DIR}/set_platform.cmake")
+	message("Found set_platform.cmake - including...")
+	message("Set a new TARGET_PLATFORM ('win'/'rpi') from within set_platform.cmake")
+	include(set_platform.cmake)
+else()
+	# Create the missing file
+	utils_createSetPlatformFile()
+	message("Including set_platform.cmake")
+	include(set_platform.cmake)
 endif()
 
-# version.cmake gets the project version details, in the format 
+# Check that a valid TARGET_PLATFORM has been set from within 'set_platform.cmake'
+if(DEFINED TARGET_PLATFORM)
+	if(${TARGET_PLATFORM} STREQUAL "win")
+		message("Building for Windows")
+	elseif(${TARGET_PLATFORM} STREQUAL "rpi")
+		message("Building for RPi on Raspbian")
+	else()
+		message(SEND_ERROR "Invalid TARGET_PLATFORM selected: '${TARGET_PLATFORM}'")
+		message("Check TARGET_PLATFORM setting in 'set_platform.cmake'")
+	endif()
+endif()
+
+# getVersionDetails() gets the project version details, in the format 
 # (int) MAJ_VER, (int) MIN_VER, (int) COMMITS_PAST, (str) CLEAN_FLAG
 # (str) TARGET_SUFFIX is also provided
-include(version.cmake)
+getVersionDetails()
 message("Target suffix is: " ${TARGET_SUFFIX})
 
 # Set up platform-specific options
