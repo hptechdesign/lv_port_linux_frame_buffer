@@ -5,7 +5,7 @@
 # 	win_ecu_display - for Windows (simulator)
 # 	ecu_sensor_spoofer - for Windows (simulator)
 
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.26)
 #include utitilty functions
 include(utils.cmake)
 
