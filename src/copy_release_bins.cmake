@@ -21,12 +21,12 @@ if(${TARGET_PLATFORM} STREQUAL "win")
                COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:win_ecu_display> 
 			   ${DEST}/${PROJECT_NAME}_${TARGET_SUFFIX}.exe)
 
-	# Copy SDL2 dll to release folder
-	add_custom_command(TARGET ${PROJECT_NAME} 
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> 
-	${DEST}
-	)
+	# Copy SDL2 dll to release folder (should not be needed after static linking update)
+	#add_custom_command(TARGET ${PROJECT_NAME} 
+	#POST_BUILD
+	#COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> 
+	#${DEST}
+	#)
 
 	# Copy ecu_sensor_spoofer binary to release folder
 	add_custom_command(TARGET ecu_sensor_spoofer 

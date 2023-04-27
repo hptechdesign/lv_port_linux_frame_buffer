@@ -9,7 +9,7 @@
  */
 
 // **************  Common includes
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 #include "ecu_configs.h"
 #include "sensor.h"
 #include "serial.h"
@@ -35,8 +35,7 @@
 #elif WIN_ECU_DISPLAY
 // include the lvgl sdl header
 #include "sdl/sdl.h"
-// also include the SDL2 header
-#include "sdl.h"
+#include "SDL.h"
 #include "Windows.h"
 #include "unistd.h"
 #endif // RPI_ECU_DISPLAY elif WIN_ECU_DISPLAY

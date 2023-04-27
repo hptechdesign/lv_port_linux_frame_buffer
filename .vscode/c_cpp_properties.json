@@ -4,10 +4,7 @@
             "name": "RPI-Win",
             "includePath": [
                 "${workspaceRoot}/**",
-                "${workspaceRoot}/inc/**",
-                "${workspaceRoot}/inc/lvgl/**",
-                "${workspaceRoot}/inc/lv_drivers/**",
-                "${workspaceRoot}/inc/rs-232",
+                "${workspaceRoot}/build/_deps/**",
                 "${workspaceRoot}/src/widgets"
             ],
             "defines": [

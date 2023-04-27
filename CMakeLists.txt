@@ -6,6 +6,8 @@
 # 	ecu_sensor_spoofer - for Windows (simulator)
 
 cmake_minimum_required(VERSION 3.26)
+# set policy for compatibility with LVGL
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 #include utitilty functions
 include(utils.cmake)
 
@@ -87,8 +89,11 @@ add_compile_definitions(MAJ_VER=${MAJ_VER}
 						COMMITS_PAST=${COMMITS_PAST}
 						CLEAN_FLAG="${CLEAN_FLAG}")
 
+set(LV_LVGL_H_INCLUDE_SIMPLE ON)
+set(LV_CONF_INCLUDE_SIMPLE ON)
 set(GCC_COVERAGE_COMPILE_FLAGS 
 	"-DLV_CONF_INCLUDE_SIMPLE"
+	"-DLV_LVGL_H_INCLUDE_SIMPLE"
 	)
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
@@ -96,13 +101,19 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 #target executables will be placed in bin/
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-include_directories(inc 
-					inc/rs-232 
-					src)
-add_subdirectory(inc/lvgl)
-add_subdirectory(inc/lv_drivers)
-add_subdirectory(inc/rs-232)
+# Specify path to own LVGL config header
+set(LV_CONF_PATH
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/lv_conf.h
+    CACHE STRING "" FORCE)
+
+set(FETCHCONTENT_QUIET FALSE)
+# Fetch external dependencies
+include(${CMAKE_CURRENT_SOURCE_DIR}/external/external.cmake)
+
+
 add_subdirectory(src)
+#include_directories(src)
+#
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
 

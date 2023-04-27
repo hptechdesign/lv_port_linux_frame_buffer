@@ -9,6 +9,7 @@
  */
 
 #include "ecu_configs.h"
+#include <stdint.h>
 
 #define METER_OILP_XPOS (50)
 #define METER_OILP_YPOS 10
