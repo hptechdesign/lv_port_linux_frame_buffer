@@ -4,18 +4,18 @@ LVGL configured to work with /dev/fb0 on Linux. Also compiles as a windows simul
 which generates an additional target "ecu_sensor_spoofer" - see
 instructions at bottom.
 
-When cloning this repository, also make sure to download submodules (`git submodule update --init --recursive`) otherwise you will be missing key components.
+The project has several dependencies that are pulled in at build time by CMake's
+"FetchContent" command.
 
 ## Clone the project
 ```
 git clone git@github.com:hptechdesign/rpi_ecu_display.git
 cd rpi_ecu_display/
-git submodule update --init --recursive
 ```
 
 ## Recommended build tools and required dependencies: 
 
-  - MSYS2:
+  - MSYS2 (recommended):
     - https://www.msys2.org/wiki/MSYS2-installation/ 
     - Follow the installation instructions, then open the MSYS2 terminal [from start menu, or ```C:\msys64\ucrt64.exe```]
     - Type ```pacman -Syuu``` to update all packages. If the terminal closes, run it again until all updates are complete.
@@ -24,10 +24,6 @@ git submodule update --init --recursive
     - ```pacman -S mingw-w64-ucrt-x86_64-toolchain ```
   - CMAKE
     - ```pacman -S mingw-w64-x86_64-cmake```
-  - SDL2 graphics drivers 
-    - Required for the windows/SDL build, not needed for RPI
-    - ```pacman -S mingw-w64-x86_64-SDL2```
-
 
 
 ## RPI cross-compilation toolchain
@@ -45,11 +41,12 @@ Using this information you should be able to modify the rpi_ecu_display project'
 ### For Windows:
 
 Make sure that you delete the /build folder if you've previously used it to build for RPi.
-Any binaries generated previously will remain in the /bin folder.
-  - Open the top-level ```CMakeLists.txt``` file and uncomment the line
-    ```set(platform "win")```. 
-  - Make sure that ```set(platform "rpi")``` is commented out.
-  - Choose "Build" from the control panel at the bottom of VScode.
+Any binaries generated previously will remain in the /bin folder. Navigate to the top of
+the cloned rpi_ecu_display directory and execute the following two commands:
+  - Generate:
+    -  ```cmake -B ./build -DCMAKE_BUILD_TYPE=Release -G "Ninja"```
+  - Build:
+    -  ```cmake --build./build --config Release``` 
 
 The following executables will be placed in ```{workspace_dir}/bin```:
  - win_ecu_display
@@ -60,10 +57,15 @@ The following executables will be placed in ```{workspace_dir}/bin```:
 ### For RPI
 Make sure that you delete the /build folder if you've previously used it to build for Windows.
 Any binaries generated previously will remain in the /bin folder.
-  - Open the top-level ```CMakeLists.txt``` file and uncomment the line
+  - Open the  ```set_platform.cmake``` file and ensiure the command is
     ```set(platform "rpi")```. 
   - Make sure that ```set(platform "win")``` is commented out.
-  - Choose "Build" from the control panel at the bottom of VScode.
+
+Navigate to the top of the cloned rpi_ecu_display directory and execute the following two commands:
+  - Generate:
+    -  ```cmake -B ./build -DCMAKE_BUILD_TYPE=Release -G "Ninja"```
+  - Build:
+    -  ```cmake --build./build --config Release``` 
 
 The ecu_sensor_spoofer will not be built. Only the rpi_ecu_display executable is built, and placed in  ```{workspace_dir}/bin```.
 
