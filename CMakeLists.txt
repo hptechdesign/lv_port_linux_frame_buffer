@@ -115,8 +115,8 @@ add_subdirectory(src)
 #include_directories(src)
 #
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE CMAKE_EXPORT_COMPILE_COMMANDS=1)
-
+# Enable Clangd Intellisense to work on reference files within the project
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 
