@@ -132,7 +132,7 @@ int main(int argc, char * argv[])
         lv_img_create(lv_scr_act()); /*Create an image object for the cursor */
     lv_img_set_src(cursor_obj, &mouse_cursor_icon); /*Set the image source*/
     lv_indev_set_cursor(mouse_indev,
-                        cursor_obj); /*Connect the image  object to the driver*/
+                        cursor_obj);                /*Connect the image  object to the driver*/
 #endif // SDL(elif)RPI_ECU_DISPLAY
 
     /*Draw Widgets*/
@@ -148,8 +148,8 @@ int main(int argc, char * argv[])
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
         lv_timer_handler();
-        usleep(5000);
-        // poll for serial data
+        // usleep(5000);
+        //  poll for serial data
         sensor_getData();
         // update widgets
 
@@ -167,8 +167,8 @@ int main(int argc, char * argv[])
         // Run LVGL engine
         lv_tick_inc(1);
         lv_timer_handler();
-        usleep(1000);
-        // poll for serial data
+        // usleep(1000);
+        //  poll for serial data
         sensor_getData();
         // update widgets
 

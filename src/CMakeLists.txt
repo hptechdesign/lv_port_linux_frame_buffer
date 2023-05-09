@@ -25,7 +25,8 @@ add_executable(${PROJECT_NAME}
 				main_display.c 
 				serial.c
 				sensor.c
-				mouse_cursor_icon.c)
+				mouse_cursor_icon.c
+				crc.c)
 
 add_subdirectory(widgets)
 
@@ -36,7 +37,9 @@ if(${PROJECT_NAME} STREQUAL "win_ecu_display")
 	add_executable(ecu_sensor_spoofer 
 								main_spoofer.c 
 								serial.c
-								sensor.c)					
+								sensor.c
+								crc.c)
+													
 	target_link_libraries(ecu_sensor_spoofer PRIVATE rs232)
 endif()
 						

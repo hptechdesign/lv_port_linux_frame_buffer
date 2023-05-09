@@ -12,6 +12,7 @@
 #include "ecu_configs.h"
 #include "serial.h"
 #include "sensor.h"
+#include "crc.h"
 
 /* Private macros and typedefs */
 typedef unsigned char BYTE;
@@ -143,17 +144,18 @@ control_data_t serial_getControlData(void)
 
 void serial_getSensorData(sensor_data_t * rx_buffer)
 {
+    uint16_t crc_bytes = 0;
+
     if(serial_mode == mode_stream_data) {
         int rx_bytes = 0, timeout = 0;
         BYTE byteBuf = '0';
-        while(rx_bytes < (SENSOR_FRAME_SIZE - 1) && timeout < 0xFFFFF) {
+        while(rx_bytes < SENSOR_FRAME_SIZE && timeout < 0xFFFFF) {
             // order is important here, else we'd drop the second byte after
             // identifying the first delimiter First finish processing any part
             // received buffers
             if(rx_bytes > 0) {
-                rx_bytes +=
-                    RS232_PollComport(port, &rx_sensor_data[rx_bytes],
-                                      (SENSOR_FRAME_SIZE - 1 - rx_bytes));
+                rx_bytes += RS232_PollComport(port, &rx_sensor_data[rx_bytes],
+                                              (SENSOR_FRAME_SIZE - rx_bytes));
             }
             // then look for the first delimiter
             else if(RS232_PollComport(port, &byteBuf, 1) == 1 &&
@@ -170,66 +172,72 @@ void serial_getSensorData(sensor_data_t * rx_buffer)
             }
         }
 
-        // check CRC here
-        // rx_sensor_data[sensor_crc_byte1];
-        // rx_sensor_data[sensor_crc_byte2];
+        // Calculate CRC on payload bytes
+        crc_bytes = crcFast(&rx_sensor_data[0], (size_t)31);
+        // Check calculated vs received CRC bytes
+        if(rx_sensor_data[sensor_crc_byte1] ==
+               (BYTE)((crc_bytes >> 8) & 0xFF) &&
+           (rx_sensor_data[sensor_crc_byte2] == (BYTE)crc_bytes & 0xFF)) {
 
-        if(rx_sensor_data[crank_rpm_delimit] == 'S') {
-            rx_buffer->crank_rpm = rx_sensor_data[crank_rpm_x1000] * 1000;
-            rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x100] * 100;
-            rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x10] * 10;
+            if(rx_sensor_data[crank_rpm_delimit] == 'S') {
+                rx_buffer->crank_rpm = rx_sensor_data[crank_rpm_x1000] * 1000;
+                rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x100] * 100;
+                rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x10] * 10;
+            }
+
+            if(rx_sensor_data[map_delimit] == 'M') {
+                rx_buffer->manifold_pressure_mbar =
+                    rx_sensor_data[manifold_pressure_x1000] * 1000;
+                rx_buffer->manifold_pressure_mbar +=
+                    rx_sensor_data[manifold_pressure_x100] * 100;
+                rx_buffer->manifold_pressure_mbar +=
+                    rx_sensor_data[manifold_pressure_x10] * 10;
+            }
+
+            if(rx_sensor_data[temperature_delimit_a] == 'T' &&
+               rx_sensor_data[temperature_a_delimit] == 'A') {
+                rx_buffer->temperature_a_degC =
+                    rx_sensor_data[temperature_a_x100] * 100;
+                rx_buffer->temperature_a_degC +=
+                    rx_sensor_data[temperature_a_x10] * 10;
+                rx_buffer->temperature_a_degC +=
+                    rx_sensor_data[temperature_a_x1];
+            }
+
+            if(rx_sensor_data[temperature_delimit_b] == 'T' &&
+               rx_sensor_data[temperature_b_delimit] == 'B') {
+                rx_buffer->temperature_b_degC =
+                    rx_sensor_data[temperature_b_x100] * 100;
+                rx_buffer->temperature_b_degC +=
+                    rx_sensor_data[temperature_b_x10] * 10;
+                rx_buffer->temperature_b_degC +=
+                    rx_sensor_data[temperature_b_x1];
+            }
+
+            if(rx_sensor_data[oil_pressure_delimit] == 'P') {
+                rx_buffer->oil_pressure_mbar =
+                    rx_sensor_data[oil_pressure_x1000] * 1000;
+                rx_buffer->oil_pressure_mbar +=
+                    rx_sensor_data[oil_pressure_x100] * 100;
+                rx_buffer->oil_pressure_mbar +=
+                    rx_sensor_data[oil_pressure_x10] * 10;
+            }
+
+            if(rx_sensor_data[fuel_pressure_delimit] == 'D') {
+                rx_buffer->fuel_pressure_bar =
+                    rx_sensor_data[fuel_pressure_x1000] * 1000;
+                rx_buffer->fuel_pressure_bar +=
+                    rx_sensor_data[fuel_pressure_x100] * 100;
+                rx_buffer->fuel_pressure_bar +=
+                    rx_sensor_data[fuel_pressure_x10] * 10;
+            }
+
+            // rx_sensor_data[intake_airflow_delimit];
+            // rx_sensor_data[intake_airflow_res1];
+            // rx_sensor_data[intake_airflow_res2];
+            // rx_sensor_data[intake_airflow_res3];
+            // rx_sensor_data[intake_airflow_res4];
         }
-
-        if(rx_sensor_data[map_delimit] == 'M') {
-            rx_buffer->manifold_pressure_mbar =
-                rx_sensor_data[manifold_pressure_x1000] * 1000;
-            rx_buffer->manifold_pressure_mbar +=
-                rx_sensor_data[manifold_pressure_x100] * 100;
-            rx_buffer->manifold_pressure_mbar +=
-                rx_sensor_data[manifold_pressure_x10] * 10;
-        }
-
-        if(rx_sensor_data[temperature_delimit_a] == 'T' &&
-           rx_sensor_data[temperature_a_delimit] == 'A') {
-            rx_buffer->temperature_a_degC =
-                rx_sensor_data[temperature_a_x100] * 100;
-            rx_buffer->temperature_a_degC +=
-                rx_sensor_data[temperature_a_x10] * 10;
-            rx_buffer->temperature_a_degC += rx_sensor_data[temperature_a_x1];
-        }
-
-        if(rx_sensor_data[temperature_delimit_b] == 'T' &&
-           rx_sensor_data[temperature_b_delimit] == 'B') {
-            rx_buffer->temperature_b_degC =
-                rx_sensor_data[temperature_b_x100] * 100;
-            rx_buffer->temperature_b_degC +=
-                rx_sensor_data[temperature_b_x10] * 10;
-            rx_buffer->temperature_b_degC += rx_sensor_data[temperature_b_x1];
-        }
-
-        if(rx_sensor_data[oil_pressure_delimit] == 'P') {
-            rx_buffer->oil_pressure_mbar =
-                rx_sensor_data[oil_pressure_x1000] * 1000;
-            rx_buffer->oil_pressure_mbar +=
-                rx_sensor_data[oil_pressure_x100] * 100;
-            rx_buffer->oil_pressure_mbar +=
-                rx_sensor_data[oil_pressure_x10] * 10;
-        }
-
-        if(rx_sensor_data[fuel_pressure_delimit] == 'D') {
-            rx_buffer->fuel_pressure_bar =
-                rx_sensor_data[fuel_pressure_x1000] * 1000;
-            rx_buffer->fuel_pressure_bar +=
-                rx_sensor_data[fuel_pressure_x100] * 100;
-            rx_buffer->fuel_pressure_bar +=
-                rx_sensor_data[fuel_pressure_x10] * 10;
-        }
-
-        // rx_sensor_data[intake_airflow_delimit];
-        // rx_sensor_data[intake_airflow_res1];
-        // rx_sensor_data[intake_airflow_res2];
-        // rx_sensor_data[intake_airflow_res3];
-        // rx_sensor_data[intake_airflow_res4];
     }
 }
 
@@ -292,6 +300,8 @@ int serial_init(void)
     serial_mode = mode_stream_data;
     printf("\nRunning in sensor sensor mode.");
 #endif
+
+    crcInit();
     return (serial_mode);
 }
 
