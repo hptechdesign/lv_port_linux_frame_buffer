@@ -1,43 +1,61 @@
-cmake_minimum_required(VERSION 3.12.4)
+# src/CMakeLists.txt
+#
+# Create project target executables
 
-if(${PROJECT_NAME} STREQUAL "win_ecu_display")
-	# MSYS2 package:
-	# If not installed, first open MSYS2 terminal and install:
-	# pacman -S mingw-w64-x86_64-SDL2
-	# Then the following should be found by cmake:
-	find_package(SDL2 REQUIRED)
-	include_directories(${SDL2_INCLUDE_DIRS})
-	set(ecu_libs 		lvgl 
-						lvgl::drivers
-						${SDL2_LIBRARIES} #order is important here
+cmake_minimum_required(VERSION 3.26)
+
+if(${TARGET_PLATFORM} STREQUAL "win")
+
+	# Set the Windows-specific ECU libraries
+	set(ecu_libs 		lvgl::drivers
+						lvgl::lvgl
+						SDL2::SDL2main 
+						SDL2::SDL2-static 
 						rs232
 						widgets
-)
-else() # rpi_ecu_build
-	set(ecu_libs 		lvgl 
-						lvgl::drivers 
+	)
+include_directories(${sdl2_SOURCE_DIR}/include )
+elseif(${TARGET_PLATFORM} STREQUAL "rpi")
+
+	# Set the RPi-specific ECU libraries
+	set(ecu_libs 		lvgl::drivers
+						lvgl::lvgl 
 						rs232
 						widgets
-)
+	)
+	message("RPI include" ${lv_drivers_SOURCE_DIR})
+	include_directories(${lv_drivers_SOURCE_DIR})
 endif()
-
+message("------------------------- \neculibs: ${ecu_libs}\n-----------------------------")
+# Create the main ECU executable - both platforms
 add_executable(${PROJECT_NAME} 
 				main_display.c 
 				serial.c
 				sensor.c
-				mouse_cursor_icon.c)
+				mouse_cursor_icon.c
+				crc.c)
 
 add_subdirectory(widgets)
+target_link_libraries(widgets PRIVATE lvgl::lvgl)
+target_include_directories(widgets PUBLIC lvgl::lvgl )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE 	${ecu_libs})
+# Link the platform-specific libraries
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ecu_libs})
+target_include_directories(${PROJECT_NAME} PUBLIC ${ecu_libs}  ${sdl2_SOURCE_DIR}/include )
 
-if(${PROJECT_NAME} STREQUAL "win_ecu_display")
-	# create ecu_sensor_spoofer if compiling for windows
+
+if(${TARGET_PLATFORM} STREQUAL "win")
+
+	# Create ecu_sensor_spoofer if compiling for windows
 	add_executable(ecu_sensor_spoofer 
-								main_spoofer.c 
-								serial.c
-								sensor.c)					
+					main_spoofer.c 
+					serial.c
+					sensor.c
+					crc.c)
 	target_link_libraries(ecu_sensor_spoofer PRIVATE rs232)
 endif()
+
+# Copy release binaries to a bin/ sub-folder
+include(copy_release_bins.cmake)
 						
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED 17)

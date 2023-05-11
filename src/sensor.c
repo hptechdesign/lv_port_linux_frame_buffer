@@ -29,9 +29,6 @@
 
 /* Private function prototypes */
 
-// ecu_display functions
-void sensor_getData(void);
-
 // sensor_spoofer functions
 int sensor_spoofNext(int current, int target, int maxPercentDiff);
 void sensor_generateData(void);
@@ -132,7 +129,7 @@ void sensor_fillBufWithCurrentData(char * buf)
  * next packet of sensor data from the serial rx buffer
  *
  */
-void sensor_getData(void)
+void sensor_getSerialRXData(void)
 {
     serial_getSensorData(&sensor_data);
 }

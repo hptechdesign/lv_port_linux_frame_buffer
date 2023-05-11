@@ -8,7 +8,7 @@
  *
  */
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 #include "meter_oilPressure.h"
 #include <stdio.h>
 

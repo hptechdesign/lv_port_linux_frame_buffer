@@ -1,9 +1,0 @@
-[submodule "inc/lv_drivers"]
-	path = inc/lv_drivers
-	url = git@github.com:hptechdesign/lv_drivers.git
-[submodule "inc/lvgl"]
-	path = inc/lvgl
-	url = git@github.com:hptechdesign/lvgl.git
-[submodule "inc/rs-232"]
-	path = inc/rs-232
-	url = git@github.com:hptechdesign/rs-232.git

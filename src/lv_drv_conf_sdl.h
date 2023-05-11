@@ -1,15 +1,12 @@
 /**
  * @file lv_drv_conf_sdl.h
  * @author Huw Price/LVGL
- * @brief Redirected lvgl library call for SDL builds - Configuration file for v8.3.0
+ * @brief Redirected lvgl library call for SDL builds - Configuration file for
+ * v8.3.0
  * @date 2023-04-06
  *
  *
  */
-
-
-
-
 
 /// https://betterprogramming.pub/build-a-c-gui-application-with-lvgl-and-a-sdl2-as-the-backend-85a07ee94a9f
 
@@ -115,7 +112,7 @@
 #  define SDL_DOUBLE_BUFFERED 0
 
 /*Eclipse: <SDL2/SDL.h>    Visual Studio: <SDL.h>*/
-#  define SDL_INCLUDE_PATH    <SDL2/SDL.h>
+#  define SDL_INCLUDE_PATH    <../sdl2_include/SDL.h>
 
 /*Open two windows to test multi display support*/
 #  define SDL_DUAL_DISPLAY            0

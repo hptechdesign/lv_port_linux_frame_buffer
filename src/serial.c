@@ -12,6 +12,7 @@
 #include "ecu_configs.h"
 #include "serial.h"
 #include "sensor.h"
+#include "crc.h"
 
 /* Private macros and typedefs */
 typedef unsigned char BYTE;
@@ -143,17 +144,18 @@ control_data_t serial_getControlData(void)
 
 void serial_getSensorData(sensor_data_t * rx_buffer)
 {
+    uint16_t crc_bytes = 0;
+
     if(serial_mode == mode_stream_data) {
         int rx_bytes = 0, timeout = 0;
         BYTE byteBuf = '0';
-        while(rx_bytes < (SENSOR_FRAME_SIZE - 1) && timeout < 0xFFFFF) {
+        while(rx_bytes < SENSOR_FRAME_SIZE && timeout < 0xFFFFF) {
             // order is important here, else we'd drop the second byte after
             // identifying the first delimiter First finish processing any part
             // received buffers
             if(rx_bytes > 0) {
-                rx_bytes +=
-                    RS232_PollComport(port, &rx_sensor_data[rx_bytes],
-                                      (SENSOR_FRAME_SIZE - 1 - rx_bytes));
+                rx_bytes += RS232_PollComport(port, &rx_sensor_data[rx_bytes],
+                                              (SENSOR_FRAME_SIZE - rx_bytes));
             }
             // then look for the first delimiter
             else if(RS232_PollComport(port, &byteBuf, 1) == 1 &&
@@ -170,66 +172,72 @@ void serial_getSensorData(sensor_data_t * rx_buffer)
             }
         }
 
-        // check CRC here
-        // rx_sensor_data[sensor_crc_byte1];
-        // rx_sensor_data[sensor_crc_byte2];
+        // Calculate CRC on payload bytes
+        crc_bytes = crcFast(&rx_sensor_data[0], (size_t)31);
+        // Check calculated vs received CRC bytes
+        if(rx_sensor_data[sensor_crc_byte1] ==
+               (BYTE)((crc_bytes >> 8) & 0xFF) &&
+           (rx_sensor_data[sensor_crc_byte2] == (BYTE)crc_bytes & 0xFF)) {
 
-        if(rx_sensor_data[crank_rpm_delimit] == 'S') {
-            rx_buffer->crank_rpm = rx_sensor_data[crank_rpm_x1000] * 1000;
-            rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x100] * 100;
-            rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x10] * 10;
+            if(rx_sensor_data[crank_rpm_delimit] == 'S') {
+                rx_buffer->crank_rpm = rx_sensor_data[crank_rpm_x1000] * 1000;
+                rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x100] * 100;
+                rx_buffer->crank_rpm += rx_sensor_data[crank_rpm_x10] * 10;
+            }
+
+            if(rx_sensor_data[map_delimit] == 'M') {
+                rx_buffer->manifold_pressure_mbar =
+                    rx_sensor_data[manifold_pressure_x1000] * 1000;
+                rx_buffer->manifold_pressure_mbar +=
+                    rx_sensor_data[manifold_pressure_x100] * 100;
+                rx_buffer->manifold_pressure_mbar +=
+                    rx_sensor_data[manifold_pressure_x10] * 10;
+            }
+
+            if(rx_sensor_data[temperature_delimit_a] == 'T' &&
+               rx_sensor_data[temperature_a_delimit] == 'A') {
+                rx_buffer->temperature_a_degC =
+                    rx_sensor_data[temperature_a_x100] * 100;
+                rx_buffer->temperature_a_degC +=
+                    rx_sensor_data[temperature_a_x10] * 10;
+                rx_buffer->temperature_a_degC +=
+                    rx_sensor_data[temperature_a_x1];
+            }
+
+            if(rx_sensor_data[temperature_delimit_b] == 'T' &&
+               rx_sensor_data[temperature_b_delimit] == 'B') {
+                rx_buffer->temperature_b_degC =
+                    rx_sensor_data[temperature_b_x100] * 100;
+                rx_buffer->temperature_b_degC +=
+                    rx_sensor_data[temperature_b_x10] * 10;
+                rx_buffer->temperature_b_degC +=
+                    rx_sensor_data[temperature_b_x1];
+            }
+
+            if(rx_sensor_data[oil_pressure_delimit] == 'P') {
+                rx_buffer->oil_pressure_mbar =
+                    rx_sensor_data[oil_pressure_x1000] * 1000;
+                rx_buffer->oil_pressure_mbar +=
+                    rx_sensor_data[oil_pressure_x100] * 100;
+                rx_buffer->oil_pressure_mbar +=
+                    rx_sensor_data[oil_pressure_x10] * 10;
+            }
+
+            if(rx_sensor_data[fuel_pressure_delimit] == 'D') {
+                rx_buffer->fuel_pressure_bar =
+                    rx_sensor_data[fuel_pressure_x1000] * 1000;
+                rx_buffer->fuel_pressure_bar +=
+                    rx_sensor_data[fuel_pressure_x100] * 100;
+                rx_buffer->fuel_pressure_bar +=
+                    rx_sensor_data[fuel_pressure_x10] * 10;
+            }
+
+            // rx_sensor_data[intake_airflow_delimit];
+            // rx_sensor_data[intake_airflow_res1];
+            // rx_sensor_data[intake_airflow_res2];
+            // rx_sensor_data[intake_airflow_res3];
+            // rx_sensor_data[intake_airflow_res4];
         }
-
-        if(rx_sensor_data[map_delimit] == 'M') {
-            rx_buffer->manifold_pressure_mbar =
-                rx_sensor_data[manifold_pressure_x1000] * 1000;
-            rx_buffer->manifold_pressure_mbar +=
-                rx_sensor_data[manifold_pressure_x100] * 100;
-            rx_buffer->manifold_pressure_mbar +=
-                rx_sensor_data[manifold_pressure_x10] * 10;
-        }
-
-        if(rx_sensor_data[temperature_delimit_a] == 'T' &&
-           rx_sensor_data[temperature_a_delimit] == 'A') {
-            rx_buffer->temperature_a_degC =
-                rx_sensor_data[temperature_a_x100] * 100;
-            rx_buffer->temperature_a_degC +=
-                rx_sensor_data[temperature_a_x10] * 10;
-            rx_buffer->temperature_a_degC += rx_sensor_data[temperature_a_x1];
-        }
-
-        if(rx_sensor_data[temperature_delimit_b] == 'T' &&
-           rx_sensor_data[temperature_b_delimit] == 'B') {
-            rx_buffer->temperature_b_degC =
-                rx_sensor_data[temperature_b_x100] * 100;
-            rx_buffer->temperature_b_degC +=
-                rx_sensor_data[temperature_b_x10] * 10;
-            rx_buffer->temperature_b_degC += rx_sensor_data[temperature_b_x1];
-        }
-
-        if(rx_sensor_data[oil_pressure_delimit] == 'P') {
-            rx_buffer->oil_pressure_mbar =
-                rx_sensor_data[oil_pressure_x1000] * 1000;
-            rx_buffer->oil_pressure_mbar +=
-                rx_sensor_data[oil_pressure_x100] * 100;
-            rx_buffer->oil_pressure_mbar +=
-                rx_sensor_data[oil_pressure_x10] * 10;
-        }
-
-        if(rx_sensor_data[fuel_pressure_delimit] == 'D') {
-            rx_buffer->fuel_pressure_bar =
-                rx_sensor_data[fuel_pressure_x1000] * 1000;
-            rx_buffer->fuel_pressure_bar +=
-                rx_sensor_data[fuel_pressure_x100] * 100;
-            rx_buffer->fuel_pressure_bar +=
-                rx_sensor_data[fuel_pressure_x10] * 10;
-        }
-
-        // rx_sensor_data[intake_airflow_delimit];
-        // rx_sensor_data[intake_airflow_res1];
-        // rx_sensor_data[intake_airflow_res2];
-        // rx_sensor_data[intake_airflow_res3];
-        // rx_sensor_data[intake_airflow_res4];
     }
 }
 
@@ -241,57 +249,66 @@ void serial_getSensorData(sensor_data_t * rx_buffer)
  * @return int stream mode
  */
 
-int serial_init(void)
+int serial_init(serial_modes_t program_mode)
 {
-    // user selects serial port
-    serial_mode = mode_select_port;
-#if WIN_ECU_DISPLAY
-    serial_selectPort();
-#else
-    port = 0;
-#endif
-    // open the selected port
-    if(RS232_OpenComport(port, bdrate, mode, 0)) {
-        printf("Can not open comport\n");
-
-        return (0);
-    }
-
-// serial splash message
-#if WIN_ECU_DISPLAY || ECU_SENSOR_SPOOFER
-    snprintf(msg, sizeof(msg), "\n\rOpened port: COM%d\n", (port + 1));
-#elif RPI_ECU_DISPLAY
-    snprintf(msg, sizeof(msg), "Opened port: %3d\n", port);
-#endif
-    printf(msg);
-    serial_puts(msg);
-
     // user selects serial mode
     int userInput = 0;
+    serial_mode   = mode_select_port;
 
-#if(0)
-    printf("Select test mode - 1=ASCII, 2=ECU_Data: ");
-    while(scanf("%d", &userInput) != 1) {
-        printf("Please enter a value [1 or 2].\n");
-    };
-    if(userInput > 0 && userInput < 3) {
-        if(userInput == 1) {
-            serial_mode = mode_ascii;
-            printf("\nRunning in ASCII mode");
+#if WIN_ECU_DISPLAY
+    // only need to ask user for mode if in display program - not
+    // ecu_sensor_spoofer:
+    if(program_mode != mode_internal_spoof) {
+        printf("\n\nSelect test mode.\n 1 = External serial ECU data\n 2 = "
+               "Generate "
+               "internal spoofed ECU_Data\n: ");
+        while(scanf("%d", &userInput) != 1) {
+            printf("Please enter a value [1 or 2].\n");
+        };
+        if(userInput > 0 && userInput < 3) {
+            if(userInput == 1) {
+                serial_mode = mode_stream_data;
+                printf("\nRunning in external sensor mode (serial).");
+            } else {
+                serial_mode = mode_internal_spoof;
+                printf("\nRunning in internal spoof mode.");
+            }
         } else {
-            serial_mode = mode_stream_data;
-            printf("\nRunning in sensor sensor mode.");
+            snprintf(msg, sizeof(msg), "\n\rSelection [%3d] is not valid.\
+                Please enter a value [1 or 2].",
+                     userInput);
+            printf(msg);
         }
     } else {
-        snprintf(msg, sizeof(msg), "\n\rSelection [%3d] is not valid.\
-    Please enter a value [1 or 2].",
-                 userInput);
-        printf(msg);
+        serial_mode = mode_stream_data;
     }
 #else
     serial_mode = mode_stream_data;
     printf("\nRunning in sensor sensor mode.");
 #endif
+
+    if(serial_mode == mode_stream_data) {
+#if WIN_ECU_DISPLAY
+        serial_selectPort();
+#else
+        port = 0;
+#endif
+        // open the selected port
+        if(RS232_OpenComport(port, bdrate, mode, 0)) {
+            return (mode_port_error);
+        }
+
+// serial splash message
+#if WIN_ECU_DISPLAY || ECU_SENSOR_SPOOFER
+        snprintf(msg, sizeof(msg), "\n\rOpened port: COM%d\n", (port + 1));
+#elif RPI_ECU_DISPLAY
+        snprintf(msg, sizeof(msg), "Opened port: %3d\n", port);
+#endif
+        printf(msg);
+        serial_puts(msg);
+    }
+
+    crcInit();
     return (serial_mode);
 }
 
@@ -307,7 +324,7 @@ void serial_selectPort(void)
     while(port == -1) {
         // select serial port
 
-        printf("\nEnter a COM port number: ");
+        printf("\n\nEnter a COM port number: ");
         while(scanf("%d", &userInput) != 1) {
             printf("Please enter a value [1 to 99].\n");
         };
