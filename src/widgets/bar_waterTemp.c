@@ -8,7 +8,7 @@
  *
  */
 
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 #include "bar_waterTemp.h"
 #include <stdio.h>
 

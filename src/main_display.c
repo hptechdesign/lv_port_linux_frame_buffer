@@ -9,8 +9,9 @@
  */
 
 // **************  Common includes
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 #include "ecu_configs.h"
+#include "sensor.h"
 #include "serial.h"
 
 // Widgets
@@ -19,6 +20,7 @@
 #include "widgets/meter_fuelPressure.h"
 #include "widgets/meter_oilPressure.h"
 #include "widgets/meter_rpm.h"
+#include <stdio.h>
 
 // RPI drivers
 #if RPI_ECU_DISPLAY
@@ -33,8 +35,7 @@
 #elif WIN_ECU_DISPLAY
 // include the lvgl sdl header
 #include "sdl/sdl.h"
-// also include the SDL2 header
-#include "sdl.h"
+#include "SDL.h"
 #include "Windows.h"
 #include "unistd.h"
 #endif // RPI_ECU_DISPLAY elif WIN_ECU_DISPLAY
@@ -42,25 +43,35 @@
 // **************  DEFINES
 #define DISP_BUF_SIZE (128 * 1024)
 
+/* Private functions */
+void display_updateWidgets(void);
+void printVersionDetails(void);
+
 static unsigned char serialBuf[4096];
 
 // ************** MAIN
 
 int main(int argc, char * argv[])
 {
+    printVersionDetails();
+
+    // user selects serial port
+    serial_modes_t mode = serial_init(mode_select_port);
+    if((mode != mode_internal_spoof) && (mode != mode_stream_data)) {
+        printf("\nFailed to initialise serial port");
+        // keep window open
+        char prompt = 0;
+        printf("\nPress a key and press enter to continue \n");
+        scanf("%d", &prompt);
+        // exit program
+        return mode_port_error;
+    }
+
     /*LittlevGL init*/
     lv_init();
 #if WIN_ECU_DISPLAY
     sdl_init();
 #endif
-
-    printf("\nBegin main loop");
-    // user selects serial port
-    serial_modes_t mode = serial_init();
-    if((mode != mode_ascii) && (mode != mode_stream_data)) {
-        printf("Failed to initialise serial port");
-        return 3;
-    }
 
     // set up the display driver
 #if WIN_ECU_DISPLAY
@@ -150,7 +161,7 @@ int main(int argc, char * argv[])
         lv_timer_handler();
         // usleep(5000);
         //  poll for serial data
-        sensor_getData();
+        sensor_getSerialRXData();
         // update widgets
 
         bar_waterTempASetValue(sensor_getTemperatureA());
@@ -168,20 +179,32 @@ int main(int argc, char * argv[])
         lv_tick_inc(1);
         lv_timer_handler();
         // usleep(1000);
-        //  poll for serial data
-        sensor_getData();
-        // update widgets
 
-        bar_waterTempASetValue(sensor_getTemperatureA());
-        bar_waterTempBSetValue(sensor_getTemperatureB());
-        meter_airPressureSetValue(sensor_getManifoldPressure());
-        meter_fuelPressureSetValue(sensor_getFuelPressure());
-        meter_oilPressureSetValue(sensor_getOilPressure());
-        meter_rpmSetValue(sensor_getCrankRpm());
+        if(mode == mode_stream_data) {
+            //  poll for serial data
+            sensor_getSerialRXData();
+        } else {
+            // spoof the sensor data
+            sensor_generateData();
+        }
+
+        display_updateWidgets();
     }
+
 #endif // WIN_ECU_DISPLAY
 
     return 0;
+}
+
+void display_updateWidgets(void)
+{
+    // update widgets
+    bar_waterTempASetValue(sensor_getTemperatureA());
+    bar_waterTempBSetValue(sensor_getTemperatureB());
+    meter_airPressureSetValue(sensor_getManifoldPressure());
+    meter_fuelPressureSetValue(sensor_getFuelPressure());
+    meter_oilPressureSetValue(sensor_getOilPressure());
+    meter_rpmSetValue(sensor_getCrankRpm());
 }
 
 #if RPI_ECU_DISPLAY
@@ -205,3 +228,17 @@ uint32_t custom_tick_get(void)
     return time_ms;
 }
 #endif // RPI_ECU_DISPLAY
+
+/**
+ * @brief Print version details
+ *
+ */
+void printVersionDetails(void)
+{
+    char tempBuf[512];
+    snprintf(tempBuf, sizeof(tempBuf),
+             "\n********************************\n* Windows ECU Display "
+             "%d.%d-%d%s\n********************************\n",
+             MAJ_VER, MIN_VER, COMMITS_PAST, CLEAN_FLAG);
+    printf("%s", tempBuf);
+}

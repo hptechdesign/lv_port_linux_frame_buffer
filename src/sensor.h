@@ -40,7 +40,7 @@ typedef struct sensor_data
 /* Public function prototypes */
 void sensor_fillBufWithCurrentData(char * buf);
 // rpi_ecu_display:
-void sensor_getData(void);
+void sensor_getSerialRXData(void);
 // application data getters
 uint16_t sensor_getCrankRpm(void);
 uint16_t sensor_getManifoldPressure(void);

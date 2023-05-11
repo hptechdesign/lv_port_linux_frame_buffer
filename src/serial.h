@@ -27,7 +27,9 @@ typedef enum {
     mode_startup,
     mode_select_port,
     mode_ascii,
-    mode_stream_data
+    mode_stream_data,
+    mode_internal_spoof,
+    mode_port_error
 } serial_modes_t;
 
 typedef enum {             //  Units:
@@ -81,7 +83,7 @@ typedef enum {
 } sensor_data_byte_t;
 
 /* Public function prototypes */
-int serial_init(void);
+int serial_init(serial_modes_t mode);
 
 // rpi_ecu_display:
 void serial_getSensorData(sensor_data_t * rx_buffer);
