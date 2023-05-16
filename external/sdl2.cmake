@@ -7,7 +7,7 @@ FetchContent_Declare(
     GIT_SHALLOW TRUE
     GIT_PROGRESS TRUE
 )
-
+set(SDL_TEST_ENABLED_BY_DEFAULT OFF)
 set(BUILD_SHARED_LIBS FALSE)
 FetchContent_MakeAvailable(SDL2)
 file(COPY ${sdl2_SOURCE_DIR}/include/ DESTINATION ${sdl2_SOURCE_DIR}/../sdl2_include)
