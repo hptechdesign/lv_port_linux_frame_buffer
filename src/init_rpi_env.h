@@ -3,9 +3,9 @@
  * @author Huw Price
  * @brief RPi specific headers
  * @date 2023-04-06
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 
 #ifndef INIT_RPI_ENV_H
@@ -15,8 +15,8 @@
 
 #if RPI_ECU_DISPLAY
 
-#include "lv_drivers/display/fbdev.h"
-#include "lv_drivers/indev/evdev.h"
+#include "display/fbdev.h"
+#include "indev/evdev.h"
 #include <unistd.h>
 #include <pthread.h>
 #include <time.h>

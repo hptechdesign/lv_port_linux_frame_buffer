@@ -23,7 +23,8 @@ elseif(${TARGET_PLATFORM} STREQUAL "rpi")
 						rs232
 						widgets
 	)
-
+	message("RPI include" ${lv_drivers_SOURCE_DIR})
+	include_directories(${lv_drivers_SOURCE_DIR})
 endif()
 message("------------------------- \neculibs: ${ecu_libs}\n-----------------------------")
 # Create the main ECU executable - both platforms
@@ -31,7 +32,8 @@ add_executable(${PROJECT_NAME}
 				main_display.c 
 				serial.c
 				sensor.c
-				mouse_cursor_icon.c)
+				mouse_cursor_icon.c
+				crc.c)
 
 add_subdirectory(widgets)
 target_link_libraries(widgets PRIVATE lvgl::lvgl)
@@ -39,7 +41,7 @@ target_include_directories(widgets PUBLIC lvgl::lvgl )
 
 # Link the platform-specific libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE ${ecu_libs})
-target_include_directories(${PROJECT_NAME} PUBLIC ${ecu_libs}  ${sdl2_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${ecu_libs}  ${sdl2_SOURCE_DIR}/include )
 
 
 if(${TARGET_PLATFORM} STREQUAL "win")
@@ -48,7 +50,8 @@ if(${TARGET_PLATFORM} STREQUAL "win")
 	add_executable(ecu_sensor_spoofer 
 					main_spoofer.c 
 					serial.c
-					sensor.c)					
+					sensor.c
+					crc.c)
 	target_link_libraries(ecu_sensor_spoofer PRIVATE rs232)
 endif()
 
