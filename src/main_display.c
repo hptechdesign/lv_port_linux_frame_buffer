@@ -15,6 +15,7 @@
 #include "serial.h"
 
 // Widgets
+#include "widgets/arc_timing.h"
 #include "widgets/bar_waterTemp.h"
 #include "widgets/meter_airPressure.h"
 #include "widgets/meter_fuelPressure.h"
@@ -48,6 +49,7 @@ void display_updateWidgets(void);
 void printVersionDetails(void);
 
 static unsigned char serialBuf[4096];
+static uint16_t throttle = 0;
 
 // ************** MAIN
 
@@ -147,6 +149,7 @@ int main(int argc, char * argv[])
 #endif // SDL(elif)RPI_ECU_DISPLAY
 
     /*Draw Widgets*/
+    arc_timing();
     bar_waterTemp1();
     bar_waterTemp2();
     meter_oilPressure();
@@ -199,6 +202,7 @@ int main(int argc, char * argv[])
 void display_updateWidgets(void)
 {
     // update widgets
+    arc_timingSetValue(throttle++);
     bar_waterTempASetValue(sensor_getTemperatureA());
     bar_waterTempBSetValue(sensor_getTemperatureB());
     meter_airPressureSetValue(sensor_getManifoldPressure());
