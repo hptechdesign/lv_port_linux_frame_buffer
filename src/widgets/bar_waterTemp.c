@@ -101,7 +101,7 @@ void bar_waterTemp1(void)
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP); /*Break the long lines*/
     lv_label_set_recolor(label1,
                          true); /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff Cylinder One, °C");
+    lv_label_set_text(label1, "#ffffff Port Cylinder, °C");
     lv_obj_set_width(
         label1,
         BAR_WATERTEMP_SIZEX); /*Set smaller width to make the lines wrap*/
@@ -145,7 +145,7 @@ void bar_waterTemp2(void)
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP); /*Break the long lines*/
     lv_label_set_recolor(label1,
                          true); /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff Cylinder Two, °C");
+    lv_label_set_text(label1, "#ffffff Starboard Cylinder, °C");
     lv_obj_set_width(
         label1,
         BAR_WATERTEMP_SIZEX); /*Set smaller width to make the lines wrap*/
