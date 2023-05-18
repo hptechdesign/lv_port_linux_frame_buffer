@@ -13,6 +13,7 @@
 #include "ecu_configs.h"
 #include "sensor.h"
 #include "serial.h"
+#include <stdio.h>
 
 // Widgets
 #include "widgets/arc_timing.h"
@@ -21,7 +22,7 @@
 #include "widgets/meter_fuelPressure.h"
 #include "widgets/meter_oilPressure.h"
 #include "widgets/meter_rpm.h"
-#include <stdio.h>
+#include "widgets/slider_throttle.h"
 
 // RPI drivers
 #if RPI_ECU_DISPLAY
@@ -156,7 +157,7 @@ int main(int argc, char * argv[])
     meter_airPressure();
     meter_fuelPressure();
     meter_rpm();
-
+    slider_throttle();
     int nBytes = 0;
 #if RPI_ECU_DISPLAY
     /*Handle LitlevGL tasks (tickless mode)*/
@@ -202,7 +203,6 @@ int main(int argc, char * argv[])
 void display_updateWidgets(void)
 {
     // update widgets
-    arc_timingSetValue(throttle++);
     bar_waterTempASetValue(sensor_getTemperatureA());
     bar_waterTempBSetValue(sensor_getTemperatureB());
     meter_airPressureSetValue(sensor_getManifoldPressure());

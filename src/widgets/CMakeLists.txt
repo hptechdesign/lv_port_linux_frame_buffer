@@ -6,6 +6,7 @@ add_library(widgets
 				meter_airPressure.c
 				meter_fuelPressure.c
 				meter_oilPressure.c
-				meter_rpm.c)
+				meter_rpm.c
+				slider_throttle.c)
 target_include_directories(widgets PRIVATE .)
 

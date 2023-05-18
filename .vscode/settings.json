@@ -17,6 +17,7 @@
         "sdl.h": "c",
         "bar_watertemp.h": "c",
         "serial.h": "c",
-        "lv_drv_conf_sdl.h": "c"
+        "lv_drv_conf_sdl.h": "c",
+        "slider_throttle.h": "c"
     }
 }

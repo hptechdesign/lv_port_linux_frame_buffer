@@ -10,14 +10,14 @@
 
 #include "ecu_configs.h"
 
-#define ARC_TIMING_XPOS 300
-#define ARC_TIMING_YPOS 300
+#define ARC_TIMING_XPOS 125
+#define ARC_TIMING_YPOS 275
 
 #define ARC_TIMING_SIZEX 150
 #define ARC_TIMING_SIZEY 150
 
-#define ARC_TIMING_MIN -90
-#define ARC_TIMING_MAX 120
+#define ARC_TIMING_MIN -15
+#define ARC_TIMING_MAX 15
 
 #define ARC_TIMING_FONT &lv_font_montserrat_12
 #define LABEL_ARC_TIMING_FONT &lv_font_montserrat_14

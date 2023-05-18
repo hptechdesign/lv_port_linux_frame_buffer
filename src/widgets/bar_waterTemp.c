@@ -94,14 +94,14 @@ void bar_waterTemp1(void)
     lv_obj_add_event_cb(barA, event_cb, LV_EVENT_DRAW_PART_END, NULL);
     lv_obj_set_size(barA, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
     lv_obj_set_pos(barA, BAR_WATERTEMP1_XPOS, BAR_WATERTEMP1_YPOS);
-    lv_bar_set_range(barA, 0, 150);
+    lv_bar_set_range(barA, BAR_WATERTEMP_MIN, BAR_WATERTEMP_MAX);
 
     // Draw label
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP); /*Break the long lines*/
     lv_label_set_recolor(label1,
                          true); /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff Port Cylinder, °C");
+    lv_label_set_text(label1, "#ffffff Port, °C");
     lv_obj_set_width(
         label1,
         BAR_WATERTEMP_SIZEX); /*Set smaller width to make the lines wrap*/
@@ -138,14 +138,14 @@ void bar_waterTemp2(void)
     lv_obj_add_event_cb(barB, event_cb, LV_EVENT_DRAW_PART_END, NULL);
     lv_obj_set_size(barB, BAR_WATERTEMP_SIZEX, BAR_WATERTEMP_SIZEY);
     lv_obj_set_pos(barB, BAR_WATERTEMP2_XPOS, BAR_WATERTEMP2_YPOS);
-    lv_bar_set_range(barB, 0, 150);
+    lv_bar_set_range(barB, BAR_WATERTEMP_MIN, BAR_WATERTEMP_MAX);
 
     // Draw label
     lv_obj_t * label1 = lv_label_create(lv_scr_act());
     lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP); /*Break the long lines*/
     lv_label_set_recolor(label1,
                          true); /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "#ffffff Starboard Cylinder, °C");
+    lv_label_set_text(label1, "#ffffff Starboard, °C");
     lv_obj_set_width(
         label1,
         BAR_WATERTEMP_SIZEX); /*Set smaller width to make the lines wrap*/
